@@ -1,6 +1,6 @@
-## COASTAL CITIES ANALYSIS
-## Megan Davis
-## Urban Ocean Lab
+### US COASTAL CITIES ANALYSIS
+### Megan Davis
+### Urban Ocean Lab
 
 ##This analysis is intended to determine the number of Americans living in coastal cities. While our definition of coastal
 #is static - any area that falls within a census-designated coastal county - because the definition of what constitutes a
@@ -11,7 +11,11 @@
 #----------------#
 ##### SET UP #####
 #----------------#
-###Prepare workspace for analysis. All data to be loaded can be accessed in `Megan Projects/Census Stuff`.
+##Prepare workspace for analysis. The Urban Area shapefile can be downloaded here: 
+#https://catalog.data.gov/dataset/tiger-line-shapefile-2018-2010-nation-u-s-2010-census-urban-area-national. All state 
+#level incorporated place shapefiles can be downloaded here: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/.
+
+#All data to be loaded can be accessed in `Megan Projects/Census Stuff`.
 
 ##Clear the workspace.
 rm(list = ls())
