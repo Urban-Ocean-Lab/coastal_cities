@@ -11,6 +11,7 @@
 #----------------#
 ##### SET UP #####
 #----------------#
+
 ##Prepare workspace for analysis. The Urban Area shapefile can be downloaded here: 
 #https://catalog.data.gov/dataset/tiger-line-shapefile-2018-2010-nation-u-s-2010-census-urban-area-national. All state 
 #level incorporated place shapefiles can be downloaded here: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/.
@@ -20,7 +21,7 @@
 ##Clear the workspace.
 rm(list = ls())
 
-##Load libraries
+##Load libraries.
 library(rgdal)
 library(dplyr)
 library(stringr)
@@ -30,28 +31,35 @@ library(rgeos)
 library(rgdal)
 library(leaflet)
 
-##Set working directory
-setwd("~/Google Drive/Megan Projects/Census Stuff/Urban Areas")
-##Pull in `Urban Area` shapefile
-urban.s <- readOGR("tl_2018_us_uac10.shp")
-##Create a shapefile with just Urbanized Areas
-ua.s <- urban.s[str_detect(urban.s@data$NAMELSAD10, "Urbanized Area"), ]
+##Set working directory.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+##Pull in Urban Area shapefile. This shapefile includes boundaries for Urbanized Clusters, places with 2.5 to 50 thousand
+#people per census block, and Urbanized Areas, places with more than 50 thousand people per census block.
+urban.shp <- readOGR("urban_area/tl_2018_us_uac10.shp")
+
+##Create a shapefile with just Urbanized Areas.
+ua.shp <- urban.shp[str_detect(urban.shp@data$NAMELSAD10, "Urbanized Area"), ]
 
 #-----------------------------------------#
 ##### LOAD AND MANIPULATE CITIES DATA #####
 #-----------------------------------------#
-###Explain...
 
-##Set working directory
-setwd("~/Google Drive/Megan Projects/Census Stuff")
+##Prior to this portion of the analysis, a list of all incorporated places with a total population of greater than 50
+#thousand was pulled from the census website 
+#(https://www.census.gov/data/tables/time-series/demo/popest/2010s-total-cities-and-towns.html). This is equivalent to 
+#780 incorporated places. Each of these incorporated places were manually matched to their corresponding county. If the 
+#county is classified as coastal (https://www.census.gov/library/visualizations/2019/demo/coastline-america.html), the 
+#incorporated place is considered coastal as well. You can access this spreadsheet here: 
+#https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing.
 
-##Read in incorporated places csv and filter the dataframe to only include coastal incorporated places.
-inc.df <- read.csv(file = "U.S. Coastal Cities - U.S. Cities.csv", header = TRUE, sep = ",") %>%
+##Read in the incorporated places csv. Convert State, City, County, and Region columns to characters for easy data
+#manipulation.
+inc.df <- read.csv(file = "incorporated_places.csv", header = TRUE, sep = ",") %>%
   mutate(State = as.character(State),
          City = as.character(City),
          County = as.character(County),
-         Region = as.character(Region)) #%>%
-  #filter(Coastal %in% TRUE)
+         Region = as.character(Region))
 
 ##Create a dataframe that is just unique state names and a row number (to be used for the purpose of looping).
 state.df <- inc.df[!duplicated(inc.df[c(1)]),]
