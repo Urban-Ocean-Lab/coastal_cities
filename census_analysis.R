@@ -1,15 +1,12 @@
-##TITLE
-##AUTHOR
-## UOL
-##Going to need to load in cities data then filter by what's coastal. Then we need to set up a for loop with a dummy 
-#dataframe that has a list of all the states. One by one it will go through each of the states and only keep incorporated 
-#places that match those included in the coastal incorporated places dataframe. Once this is completed we will have a list
-#of incorporated places in coastal counties. We then need to go through and only keep those that are contained in an
-#Urban Area.
+## COASTAL CITIES ANALYSIS
+## Megan Davis
+## Urban Ocean Lab
 
-##First calculate number of "cities by our new definition. Then what we should do since we're now doing city with both 
-#versions of density and a version with metropolitan areas is we should produce a map with each one, showing how much area
-#that definition encompasses.
+##This analysis is intended to determine the number of Americans living in coastal cities. While our definition of coastal
+#is static - any area that falls within a census-designated coastal county - because the definition of what constitutes a
+#city is so fluid, we employ three different definitions: an incoporated place within an Urbanized Area, an incorporated 
+#place within an Urbanized Cluster, or a Metropolitan Area. Our published piece **INSERT TITLE HERE** adheres to the 
+#definition of a city as an incorporated place within an Urbanized Area.
 
 #----------------#
 ##### SET UP #####
@@ -133,3 +130,13 @@ coast.pop.2018 <- as.numeric(sum(inc.df$Population.Estimate..as.of.July.1....201
 
 ##Calculate proportion of Americans living in coastal cities given a U.S. population of 331,883,986.
 prop.coast.2018 <- as.numeric(coast.pop.2018/331883986)
+
+##Going to need to load in cities data then filter by what's coastal. Then we need to set up a for loop with a dummy 
+#dataframe that has a list of all the states. One by one it will go through each of the states and only keep incorporated 
+#places that match those included in the coastal incorporated places dataframe. Once this is completed we will have a list
+#of incorporated places in coastal counties. We then need to go through and only keep those that are contained in an
+#Urban Area.
+
+##First calculate number of "cities by our new definition. Then what we should do since we're now doing city with both 
+#versions of density and a version with metropolitan areas is we should produce a map with each one, showing how much area
+#that definition encompasses.
