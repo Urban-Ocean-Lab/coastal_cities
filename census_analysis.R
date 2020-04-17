@@ -16,8 +16,6 @@
 #https://catalog.data.gov/dataset/tiger-line-shapefile-2018-2010-nation-u-s-2010-census-urban-area-national. All state 
 #level incorporated place shapefiles can be downloaded here: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/.
 
-#All data to be loaded can be accessed in `Megan Projects/Census Stuff`.
-
 ##Clear the workspace.
 rm(list = ls())
 
@@ -31,8 +29,9 @@ library(rgeos)
 library(rgdal)
 library(leaflet)
 
-##Set working directory.
-setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+##Set working directory. I store all of my shapefiles in a separate folder called geographies to avoid shapefile 
+#duplications across multiple projects.
+setwd("/Users/MeganDavis/Documents/r_code/geographies")
 
 ##Pull in Urban Area shapefile. This shapefile includes boundaries for Urbanized Clusters, places with 2.5 to 50 thousand
 #people per census block, and Urbanized Areas, places with more than 50 thousand people per census block.
@@ -40,6 +39,58 @@ urban.shp <- readOGR("urban_area/tl_2018_us_uac10.shp")
 
 ##Create a shapefile with just Urbanized Areas.
 ua.shp <- urban.shp[str_detect(urban.shp@data$NAMELSAD10, "Urbanized Area"), ]
+
+##Though I am not pulling in the incorporated place shapefiles yet, it is important to ensure that these shapefiles are 
+#saved in a specific way in order for this program to run properly. Within my geographies folder I created another folder
+#called states. In this folder I have stored all of the unzipped incorporated place files, which can be downloaded from 
+#this site: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/. DO NOT CHANGE THE NAME OF THE DOWNLOADED FILES.
+
+##Create a dataframe of all states in alphabetical order, followed by all U.S. territories in alphabetical order.
+files <- rbind(rbind(data.frame(state.name), data.frame("state.name" = c("District of Columbia"))) %>%
+  arrange(as.character(state.name)), data.frame("state.name" = c("American Samoa", "Guam", "Northern Mariana Islands",
+                                                                 "Puerto Rico", "U.S. Virgin Islands"))) %>%
+  mutate(state.name = as.character(state.name))
+
+##Retrieve the list of file names in the states folder. Put these files in alphabetical order and add row numbers. Merge 
+#this dataframe to the dataframe containing the list of states and U.S. territories. We know know which files correspond
+#to which states.
+files <- cbind(files, data.frame("files" = list.files("/Users/MeganDavis/Documents/r_code/geographies/states")) %>%
+  mutate(files = as.character(files),
+         num = row_number()) %>%
+  arrange(files))
+
+##This if statement ensures that the file names have not already been converted.
+if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in% "Alabama" == FALSE){
+  
+  ##The following section of code renames all folders and and the files within them to be compatible with the rest of this
+  #program.
+  for(i in 1:nrow(files)){
+    
+    ##Set the working directory to be inside the relevant folder.
+    setwd(paste0("/Users/MeganDavis/Documents/r_code/geographies/states/", files$files[i]))
+    
+    ##Generate a list of the files currently in the folder.
+    old_files <- list.files(getwd())
+    
+    ##Using the relevant state name, create a list of new file names.
+    new_files <- c(paste0(files$state.name[i],".cpg"), paste0(files$state.name[i],".dbf"), 
+                   paste0(files$state.name[i],".prj"), paste0(files$state.name[i],".shp"), 
+                   paste0(files$state.name[i],".shp.ea.iso.xml"), paste0(files$state.name[i],".shp.iso.xml"), 
+                   paste0(files$state.name[i],".shp.xml"), paste0(files$state.name[i],".shx"))
+    
+    ##Copy the data from the old files and recreate the same files using the new names.
+    file.copy(from = old_files, to = new_files)
+    
+    ##Remove all files under their old names.
+    file.remove(old_files)
+    
+    ##Reset the working directory to the states folder.
+    setwd("/Users/MeganDavis/Documents/r_code/geographies/states")
+    
+    ##Rename the relevant folder to its corresponding state name.
+    file.rename(from = paste0(files$files[i]), to = paste0(files$state.name[i]))
+  }
+}
 
 #-----------------------------------------#
 ##### LOAD AND MANIPULATE CITIES DATA #####
