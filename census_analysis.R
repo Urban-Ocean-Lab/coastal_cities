@@ -92,7 +92,6 @@ if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in%
   }
 }
 
-##Testing git works again.
 #-----------------------------------------#
 ##### LOAD AND MANIPULATE CITIES DATA #####
 #-----------------------------------------#
@@ -105,6 +104,9 @@ if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in%
 #incorporated place is considered coastal as well. You can access this spreadsheet here: 
 #https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing.
 
+##Set the working directory to the coastal_cities project folder.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
 ##Read in the incorporated places csv. Convert State, City, County, and Region columns to characters for easy data
 #manipulation.
 inc.df <- read.csv(file = "incorporated_places.csv", header = TRUE, sep = ",") %>%
@@ -114,16 +116,17 @@ inc.df <- read.csv(file = "incorporated_places.csv", header = TRUE, sep = ",") %
          Region = as.character(Region))
 
 ##Create a dataframe that is just unique state names and a row number (to be used for the purpose of looping).
-state.df <- inc.df[!duplicated(inc.df[c(1)]),]
+state.df <- inc.df[!duplicated(inc.df[c(1)]),] %>%
+  mutate(row_num = row_number()) %>%
+  select(State, row_num)
 
-state.df$row_num <- seq(length(state.df$State))
-state.df <- state.df[,c(1,17)]
-
-##Create an urbanized cities dataframe to be populated
+##Create a cites dataframe to be populated. As the loop in the following section of code runs, incorporated places that 
+#meet the criteria of falling in an Urbanized Area or an Urbanized Cluster will be added to this empty dataframe.
 cities <- inc.df[1,c(1:2)] %>%
   mutate(State = NA,
          City = NA,
-         Urbanized = NA)
+         Urbanized_Area = NA,
+         Urbanized_Cluster = NA)
 
 #----------------------------------------------------#
 ##### REMOVE ALL CITIES NOT IN COASTAL DATAFRAME #####
