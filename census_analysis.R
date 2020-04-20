@@ -128,23 +128,42 @@ cities <- inc.df[1,c(1:2)] %>%
          Urbanized_Area = NA,
          Urbanized_Cluster = NA)
 
+#-------------------------------------------------------#
+##### DETERMINE URBANIZATION OF INCORPORATED PLACES #####
+#-------------------------------------------------------#
+
+##EXPLAIN
+
+for(i in 1:length(state.df$row_num)){
+  
+  ##Determine the state name for the current iteration of the loop.
+  state <- state.df$State[state.df$row_num==i]
+  
+  ##Filter the incorporated places dataframe to only include results from the relevant state.
+  state.c <- inc.df %>%
+    filter(State %in% state)
+  
+  ##Set the working directory to the folder that contains the corresponding state's shapefile.
+  setwd(paste0("/Users/MeganDavis/Documents/r_code/geographies/states/", state))
+  
+  ##Load the state shapefile.
+  state.s <- readOGR(paste0(state, ".shp"))
+  
+  ##THIS IS WHERE WE NEED TO ADD HAWAII HONOLULU THING
+  
+  ##Filter out all incorporated places included in the shapefile that are not included in the state's city dataframe. The
+  #areas that will be removed include incorporated places with a total population of less than 50 thousand and all 
+  #unincorporated places.
+  state.sc <- state.s[as.character(state.s@data$NAME) %in% state.c$City,]
+}
+
+
 #----------------------------------------------------#
 ##### REMOVE ALL CITIES NOT IN COASTAL DATAFRAME #####
 #----------------------------------------------------#
 for(i in 1:length(state.df$row_num)){
-  ##Designate state name for current iteration of loop.
-  state <- state.df$State[state.df$row_num==i]
-  
-  ##Filter the coastal incorporated places dataframe to only include results from the relevant state.
-  state.c <- inc.df %>%
-    filter(State %in% state)
   
   if((state %in% "Hawaii")==F){
-    ##Set working directory to one that contains state shapefile.
-    setwd(as.character(paste0("~/Google Drive/Megan Projects/Census Stuff/States/",state)))
-  
-    ##Load state shapefile.
-    state.s <- readOGR(as.character(paste0(state,".shp")))
   
     ##Filter out all incorporated places in the shapefile that are not included in the relevant state's coastal city
     #dataframe.
