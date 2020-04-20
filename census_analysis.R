@@ -92,6 +92,7 @@ if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in%
   }
 }
 
+##Testing git works again.
 #-----------------------------------------#
 ##### LOAD AND MANIPULATE CITIES DATA #####
 #-----------------------------------------#
