@@ -102,7 +102,8 @@ if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in%
 #780 incorporated places. Each of these incorporated places were manually matched to their corresponding county. If the 
 #county is classified as coastal (https://www.census.gov/library/visualizations/2019/demo/coastline-america.html), the 
 #incorporated place is considered coastal as well. You can access this spreadsheet here: 
-#https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing.
+#https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing. The 
+#incorporated_places spreadsheet on Github is the same as the U.S. Cities page in the master spreadsheet.
 
 ##Set the working directory to the coastal_cities project folder.
 setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
@@ -125,16 +126,19 @@ state.df <- inc.df[!duplicated(inc.df[c(1)]),] %>%
 cities <- inc.df[1,c(1:2)] %>%
   mutate(State = NA,
          City = NA,
-         Urbanized_Area = NA,
-         Urbanized_Cluster = NA)
+         Urbanized_Cluster = NA,
+         Urbanized_Area = NA)
 
 #-------------------------------------------------------#
 ##### DETERMINE URBANIZATION OF INCORPORATED PLACES #####
 #-------------------------------------------------------#
 
-##EXPLAIN
+##This section of code goes through each incorporated place in each state, one-by-one, and determines if it overlaps with 
+#an Urbanized Area or an Urbanized Cluster. If the incorporated place meets either criteria, it is added to the cities 
+#dataframe.
 
-for(i in 1:length(state.df$row_num)){
+##This loop runs the following section of code for each state in the state.df dataframe.
+for(i in 1:nrow(state.df)){
   
   ##Determine the state name for the current iteration of the loop.
   state <- state.df$State[state.df$row_num==i]
@@ -155,6 +159,70 @@ for(i in 1:length(state.df$row_num)){
   #areas that will be removed include incorporated places with a total population of less than 50 thousand and all 
   #unincorporated places.
   state.sc <- state.s[as.character(state.s@data$NAME) %in% state.c$City,]
+  
+  ##Convert the shapefile of filtered incorporated places into a dataframe. Transform the NAME variable to a character for
+  #easy data manipulation and add row numbers. Filter the columns to only include NAME and row_num. This dataframe
+  #will be used to test each incorporated place, one-by-one, to see if it falls in an Urbanized Area or an Urbanized 
+  #Cluster.
+  state.sc.df <- as(state.sc, "data.frame") %>%
+    mutate(NAME = as.character(NAME),
+           row_num = row_number()) %>%
+    select(NAME, row_num)
+  
+  ##This loop runs the following section of code for each incorporated place in the state.sc.df dataframe.
+  for(x in 1:nrow(state.sc.df)){
+    
+    ##Create a variable that holds the name of the relevant incorporated place.
+    nam <- state.sc.df$NAME[state.sc.df$row_num==x]
+    
+    ##Create a variable that holds a shapefile of the relevant incorporated place.
+    shp <- state.sc[as.character(state.sc@data$NAME) %in% nam,]
+    
+    ##Test to see if the relevant incorporated place overlaps with any Urbanized Areas OR Urbanized Clusters. If the 
+    #incorporated place does not fall within either of the urbanization classifications, this will create a dataframe that
+    #consists entirely of NAs. At present, any level of overlap is considered acceptable to classify the incorporated place
+    #as falling within an urbanization classification. Create a State column, populated by the state variable created in 
+    #the state-level loop, and a City column using the name of the incorporated place in the ov dataframe. Using the first
+    #column, test to see if any of the rows contain anything other than NA values. If a row is populated, that suggests the
+    #incorporated place overlaps with an Urbanized Area OR an Urbanized Cluster. This fact is housed in the 
+    #Urbanized_Cluster column. Filter the dataframe to only the State, City, and Urbanized_Cluster columns. Select only
+    #distinct rows.
+    ov <- over(urban.shp, shp) %>%
+      mutate(State = state,
+             City = as.character(NAME),
+             Urbanized_Cluster = case_when(is.na(STATEFP)==F ~ TRUE,
+                                           is.na(STATEFP)==T ~ FALSE)) %>%
+      select(State, City, Urbanized_Cluster) %>%
+      distinct()
+    
+    ##This section of code only runs if the ov.uac dataframe contains more than one row, meaning the incorporated place 
+    #overlaped with an Urbanized Area or an Urbanized Cluster, and tests to see if the incorporated place overlaps with an
+    #Urbanized Area specifically. If the ov.uac dataframe doesn't have more than one row, meaning no overlap, there is 
+    #nothing to add to the cities dataframe and the loop will proceed to the next incorporated place.
+    if(nrow(ov)>=1){
+      
+      ##Filter the ov dataframe to only include the row that represents an overlap between the incorporated place and an
+      #Urbanized Area or Urbanized Cluster, then test to see if the incorporated place overlaps with an Urbanized Area
+      #specifically. Join the two dataframes using the State and City columns (this ensures that only an incorporated 
+      #place that overlaps with an Urbanized Area will be joined to the dataframe). If the incorporated place does not fall
+      #in an urbanized area, the joined dataframe will have an NA in the Urbanized_Area column. The final chunk of this
+      #code replaces any of those NAs with a FALSE response.
+      ov <- left_join(ov %>%
+                          filter(Urbanized_Cluster %in% TRUE), 
+                        over(ua.shp, shp) %>%
+                          mutate(State = state,
+                                 City = as.character(NAME),
+                                 Urbanized_Area = case_when(is.na(STATEFP)==F ~ TRUE,
+                                                            is.na(STATEFP)==T ~ FALSE)) %>%
+                          select(State, City, Urbanized_Area) %>%
+                          distinct(), by = c("State", "City")) %>%
+        mutate(Urbanized_Area = case_when(is.na(Urbanized_Area)==T ~ FALSE,
+                                          is.na(Urbanized_Area)==F ~ Urbanized_Area))
+      
+      ##Add the results to the cities dataframe.
+      cities <- rbind(cities, ov)
+    }
+  }
 }
 
 
@@ -162,21 +230,9 @@ for(i in 1:length(state.df$row_num)){
 ##### REMOVE ALL CITIES NOT IN COASTAL DATAFRAME #####
 #----------------------------------------------------#
 for(i in 1:length(state.df$row_num)){
-  
   if((state %in% "Hawaii")==F){
-  
-    ##Filter out all incorporated places in the shapefile that are not included in the relevant state's coastal city
-    #dataframe.
-    state.sc <- state.s[as.character(state.s@data$NAME) %in% state.c$City,]
-
-    state.sc.df <- as(state.sc, "data.frame") %>%
-      mutate(NAME = as.character(NAME))
-    state.sc.df$row_num <- seq(length(state.sc.df$NAME))
-  
     for(x in 1:length(state.sc.df$NAME)){
-      nam <- state.sc.df$NAME[state.sc.df$row_num==x]
-      shp <- state.sc[as.character(state.sc@data$NAME) %in% nam,]
-      test <- as(shp, "data.frame")
+      
       ##If there isn't an overlap this returns one row on NAs...
       ##At some point perhaps add something that looks at the percent overlap and have it so only places with a certain 
       #percent overlap can be included...
