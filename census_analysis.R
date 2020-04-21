@@ -22,7 +22,7 @@ rm(list = ls())
 ##Load libraries.
 library(rgdal)
 library(dplyr)
-library(plyr)
+#library(plyr)
 library(stringr)
 library(sf)
 library(sp)
@@ -160,8 +160,10 @@ for(i in 1:nrow(state.df)){
   #the name in the incorporated places data.
   if(state %in% "Hawaii"){
     
-    ##Revalue the NAME factor in the state.s shapefile data so Urban Honolulu is replaced with Honolulu.
-    state.s@data$NAME <- revalue(state.s@data$NAME, c("Urban Honolulu" = "Honolulu"))
+    ##Revalue the NAME factor in the state.s shapefile data so Urban Honolulu is replaced with Honolulu. To avoid having
+    #to use the plyr package (which would make you need to designate which commands come from the dplyr versus the plyr
+    #package), I did this in base R.
+    levels(state.s@data$NAME)[levels(state.s@data$NAME)=="Urban Honolulu"] <- "Honolulu"
   }
   
   ##Filter out all incorporated places included in the shapefile that are not included in the state's city dataframe. The
@@ -238,35 +240,6 @@ for(i in 1:nrow(state.df)){
 #----------------------------------------------------#
 ##### REMOVE ALL CITIES NOT IN COASTAL DATAFRAME #####
 #----------------------------------------------------#
-for(i in 1:length(state.df$row_num)){
-  if((state %in% "Hawaii")==F){
-    for(x in 1:length(state.sc.df$NAME)){
-      
-      ##If there isn't an overlap this returns one row on NAs...
-      ##At some point perhaps add something that looks at the percent overlap and have it so only places with a certain 
-      #percent overlap can be included...
-      ov <- over(ua.s, shp) %>%
-        mutate(State = state,
-              City = as.character(NAME),
-              Urbanized = case_when(is.na(STATEFP)==F ~ TRUE,
-                                    is.na(STATEFP)==T ~ FALSE)) %>%
-        filter(Urbanized %in% TRUE) %>%
-        select(State, City, Urbanized)
-    
-      if(length(ov)>=1){
-        cities <- rbind(cities, ov)
-      }
-    }
-  }else{
-    ov <- state.c %>%
-      mutate(State = as.character(State),
-             City = as.character(City),
-             Urbanized = TRUE) %>%
-      select(State, City, Urbanized)
-    
-    cities <- rbind(cities, ov)
-  } 
-}  
 
 ##Join cities data to original incorporated places dataframe
 inc.df <- left_join(inc.df, cities[!duplicated(cities[c(1:3)]),], by = c("State","City")) %>%
