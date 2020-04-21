@@ -22,6 +22,7 @@ rm(list = ls())
 ##Load libraries.
 library(rgdal)
 library(dplyr)
+library(plyr)
 library(stringr)
 library(sf)
 library(sp)
@@ -153,7 +154,15 @@ for(i in 1:nrow(state.df)){
   ##Load the state shapefile.
   state.s <- readOGR(paste0(state, ".shp"))
   
-  ##THIS IS WHERE WE NEED TO ADD HAWAII HONOLULU THING
+  ##We need to perform some extra data manipulation at this point once the loop reaches Hawaii. Honolulu is a consolidated
+  #city-county. What we would traditionally describe as the city of Honolulu is listed in the Hawaii shapefile as 
+  #"Urban Honolulu." In order for the code to run properly, we need to replace that variable with "Honolulu" so it matches
+  #the name in the incorporated places data.
+  if(state %in% "Hawaii"){
+    
+    ##Revalue the NAME factor in the state.s shapefile data so Urban Honolulu is replaced with Honolulu.
+    state.s@data$NAME <- revalue(state.s@data$NAME, c("Urban Honolulu" = "Honolulu"))
+  }
   
   ##Filter out all incorporated places included in the shapefile that are not included in the state's city dataframe. The
   #areas that will be removed include incorporated places with a total population of less than 50 thousand and all 
