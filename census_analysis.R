@@ -23,7 +23,7 @@ rm(list = ls())
 ##Load libraries.
 library(rgdal)
 library(dplyr)
-#library(plyr)
+library(stringr)
 library(stringr)
 library(sf)
 library(sp)
@@ -274,6 +274,38 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Incorpora
                                          coastal_cities$Definition %in% "Incorporated Urban Area or Cluster"] <- 
   as.numeric(sum(inc.df$Population.Estimate..as.of.July.1....2018))
 
+#--------------------------------------#
+##### TITLE... #####
+#--------------------------------------#
+
+##Description...
+#Urbanized Area and Urbanized Cluster 2018 population data: https://data.census.gov/cedsci/advanced?g=0100000US.400000.
+
+##Set working directory.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+##Read in the Urban Area/Cluster population data and remove the extra row of column labels.
+urban.df <- read.csv(file = "urban_pop.csv", header = TRUE, sep = ",") %>%
+  filter(!as.character(GEO_ID) %in% "id")
+
+##Read in the coastal counties dataframe.
+coast_county.df <- read.csv(file = "coastal_counties.csv", header = TRUE, sep = ",") %>%
+  mutate(Coastal.County = as.character(Coastal.County),
+         State = as.character(State),
+         Region = as.character(Region),
+         Coastal.County = str_remove(Coastal.County, " County| Census Area| Borough| Parish")) %>%
+  filter(!str_detect(Coastal.County, " city"))
+
+##Set the working directory to the geographies folder.
+setwd("/Users/MeganDavis/Documents/r_code/geographies")
+
+##Load in the U.S. county shapefile. This shapefile can be downloaded here, under the county sub-heading: 
+#https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html. I chose the highest resolution
+#version.
+coast_county.shp <- readOGR("counties/cb_2018_us_county_500k.shp")
+
+test <- as(coast_county.shp, "data.frame")
+
 
 
 
@@ -281,6 +313,7 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Incorpora
 
 ##SAVE THIS AT THE END
 
+#https://www.census.gov/data/tables/time-series/demo/popest/2010s-national-total.html#par_textimage_2011805803
 ##Read in the U.S Population Total csv.
 total_pop <- read.csv(file = "total_us_pop.csv", header = TRUE, sep = ",")
 
