@@ -274,40 +274,74 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Incorpora
                                          coastal_cities$Definition %in% "Incorporated Urban Area or Cluster"] <- 
   as.numeric(sum(inc.df$Population.Estimate..as.of.July.1....2018))
 
-#--------------------------------------#
-##### TITLE... #####
-#--------------------------------------#
+#-------------------------------------------#
+##### CREATE COASTAL COUNTIES SHAPEFILE #####
+#-------------------------------------------#
 
-##Description...
+##The Census Bureau provides county-level shapefiles. However, they do not distinguish which of the counties are coastal in
+#the shapefile data. This section of code pulls in a list of U.S. coastal counties and uses that information to filter the
+#county shapefile to only include coastal counties.
+
+##Set the working directory to the coastal cities project folder.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+##Read in the coastal counties dataframe. I created this spreadsheet manually using the list of U.S. coastal counties 
+#available here: https://www.census.gov/library/visualizations/2019/demo/coastline-america.html. I edited the name of some
+#counties in the spreadsheet. My edited version is available under the U.S. Coastal Counties tab of the master spreadsheet:
+#https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing. The Coastal.County
+#and State columns are renamed in order to bind this information to the county shapefile.
+coast_county.df <- read.csv(file = "coastal_counties.csv", header = TRUE, sep = ",") %>%
+  mutate(Coastal.County = as.character(Coastal.County),
+         State = as.character(State),
+         Region = as.character(Region)) %>%
+  select("NAMELSAD" = Coastal.County, "Name" = State, Region)
+
+##Set the working directory to the geographies folder.
+setwd("/Users/MeganDavis/Documents/r_code/geographies")
+
+##Load in the U.S. county shapefile. This shapefile can be downloaded here: 
+#https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2019&layergroup=Counties+%28and+equivalent%29.
+coast_county.shp <- readOGR("counties/tl_2019_us_county.shp")
+
+##In order to merge the county shapefile to the coast_county.df dataframe, we need two columns to join on: the county name
+#and the state name. This is because some counties of the same name may exist in different states. However, the shapefile
+#does not list the states by name, it uses their FIPS code. Therefore, we first bind the shapefile to a dataframe that maps
+#FIPS codes to state name. Once this is completed, we merge the coast_county.df dataframe to the county shapefile by state 
+#name, using the Name column, and county name, using the NAMELSAD column.
+coast_county.shp <- merge(merge(coast_county.shp, 
+                                rbind(read.csv(file = "states_geocodes.csv", header = TRUE, sep = ",") %>%
+                                        select("STATEFP" = State..FIPS., Name) %>%
+                                        mutate(Name = as.character(Name),
+                                               STATEFP = as.character(STATEFP),
+                                               STATEFP = case_when(str_length(STATEFP) == 1 ~ paste0("0",STATEFP),
+                                                                   str_length(STATEFP) != 1 ~ STATEFP)), 
+                                      data.frame("STATEFP" = c("03", "07", "14", "43", "52", "60", "66", "69", "72", "78"), 
+                                                 "Name" = c("American Samoa", "Canal Zone", "Guam", "Puerto Rico", 
+                                                            "U.S. Virgin Islands", "American Samoa", "Guam", 
+                                                            "Northern Mariana Islands", "Puerto Rico", 
+                                                            "U.S. Virgin Islands"))), 
+                                by = "STATEFP"), coast_county.df, by = c("NAMELSAD", "Name"))
+
+##Filter the county shapefile (coast_county.shp) to only include coastal counties.
+coast_county.shp <- coast_county.shp[is.na(coast_county.shp@data$Region)==F,]
+
+
+
+
+#####
+
 #Urbanized Area and Urbanized Cluster 2018 population data: https://data.census.gov/cedsci/advanced?g=0100000US.400000.
 
-##Set working directory.
+##Set the working directory to the coastal cities project folder.
 setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 
 ##Read in the Urban Area/Cluster population data and remove the extra row of column labels.
 urban.df <- read.csv(file = "urban_pop.csv", header = TRUE, sep = ",") %>%
   filter(!as.character(GEO_ID) %in% "id")
 
-##Read in the coastal counties dataframe.
-coast_county.df <- read.csv(file = "coastal_counties.csv", header = TRUE, sep = ",") %>%
-  mutate(Coastal.County = as.character(Coastal.County),
-         State = as.character(State),
-         Region = as.character(Region),
-         Coastal.County = str_remove(Coastal.County, " County| Census Area| Borough| Parish")) %>%
-  filter(!str_detect(Coastal.County, " city"))
-
-##Set the working directory to the geographies folder.
-setwd("/Users/MeganDavis/Documents/r_code/geographies")
-
-##Load in the U.S. county shapefile. This shapefile can be downloaded here, under the county sub-heading: 
-#https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html. I chose the highest resolution
-#version.
-coast_county.shp <- readOGR("counties/cb_2018_us_county_500k.shp")
-
-test <- as(coast_county.shp, "data.frame")
-
-
-
+#FIPS PUB 5-1 (published on June 15, 1970, and superseded by FIPS PUB 5-2 on May 28, 1987) stated that certain numeric codes
+#"are reserved for possible future use in identifying American Samoa (03), Canal Zone (07), Guam (14), Puerto Rico (43), 
+#and Virgin Islands (52)", but these codes were omitted from FIPS PUB 5-2 without comment
 
 
 
@@ -320,3 +354,5 @@ total_pop <- read.csv(file = "total_us_pop.csv", header = TRUE, sep = ",")
 ##Pull the U.S. population estimate from 2018 and use that to calculate the proportion of Americans living in coastal 
 #cities in 2018. This comes out to about 15% of the U.S. population.
 prop.coast.2018 <- coast.pop.2018/as.numeric(total_pop$POPESTIMATE2018[as.character(total_pop$NAME) %in% "United States"]).
+
+##AT the end of all this compile all the csvs needed to run this code into a zipped file.
