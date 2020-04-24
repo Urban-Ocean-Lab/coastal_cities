@@ -330,7 +330,12 @@ coast_county.shp <- coast_county.shp[is.na(coast_county.shp@data$Region)==F,]
 #-------------------------------------------------------------#
 
 ##This section of code determines which Urbanized Areas and Urban Clusters fall in coastal counties. The urban shapefile 
-#data was already generated at the beginning of this program.
+#data was already generated at the beginning of this program. The urban population data is pulled from the census data 
+#portal (https://data.census.gov/cedsci/) by doing an advanced search for people and population in urban areas. There are 
+#two versions of this data: one created using data collected over the past five years and one created using data over the 
+#past year. While the one year data is more accurate because it was collected more recently, not all areas will have data 
+#collected in the past year. Therefore, for our  anaylsis, I use the five year data, so I can capture more areas in my e
+#stimate. If you decide to use the one year estimate instead, substitute "urban_pop.csv" with "urban_pop_1yr.csv."
 
 ##Set the working directory to the coastal cities project folder.
 setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
@@ -412,7 +417,7 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Are
 
 
 
-
+##using 5 year estimates but should talk to Ayana to see if she'd prefer otherwise...
 
 
 
