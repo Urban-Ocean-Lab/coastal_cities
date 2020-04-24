@@ -97,7 +97,8 @@ if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in%
 ##Create the outline of a dataframe that will hold all of the different coastal city population estimates for easy 
 #comparison.
 coastal_cities <- data.frame("Definition" = c("Incorporated Urban Area", "Incorporated Urban Area or Cluster", 
-                                              "Urban Area", "Urban Area or Cluster", "Metropolitan Area"), 
+                                              "Urban Area", "Urban Area or Cluster", "Metropolitan Area",
+                                              "Metropolitan or Micropolitan Area"), 
                              Coastal_City_Population = NA, 
                              US_Population_Proportion = NA)
 
@@ -334,8 +335,9 @@ coast_county.shp <- coast_county.shp[is.na(coast_county.shp@data$Region)==F,]
 #portal (https://data.census.gov/cedsci/) by doing an advanced search for people and population in urban areas. There are 
 #two versions of this data: one created using data collected over the past five years and one created using data over the 
 #past year. While the one year data is more accurate because it was collected more recently, not all areas will have data 
-#collected in the past year. Therefore, for our  anaylsis, I use the five year data, so I can capture more areas in my e
-#stimate. If you decide to use the one year estimate instead, substitute "urban_pop.csv" with "urban_pop_1yr.csv."
+#collected in the past year. Therefore, for our  anaylsis, I use the five year data, so I can capture more areas in my 
+#estimate. You can learn more about the difference here: https://www.census.gov/programs-surveys/acs/guidance/estimates.html
+#If you decide to use the one year estimate instead, substitute "urban_pop.csv" with "urban_pop_1yr.csv."
 
 ##Set the working directory to the coastal cities project folder.
 setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
@@ -415,9 +417,47 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Are
 coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Area"] <-
   sum(coast_urban.df$pop_2018[str_detect(coast_urban.df$Name, "Urbanized Area")])
 
+#---------------------------------------------------------#
+##### IDENTIFY COASTAL METROPOLITAN STATISTICAL AREAS #####
+#---------------------------------------------------------#
+
+##This section of code determines which Metropolitan and Micropolitan Statistical Areas fall in coastal counties. The 2018 
+#Statistical Area shapefile can be downloaded here: https://catalog.data.gov/dataset/tiger-line-shapefile-2018-nation-u-s-
+#current-metropolitan-statistical-area-micropolitan-statist. The Metropolitan and Micropolitan Statistical Area data is 
+#pulled from the census data portal (https://data.census.gov/cedsci/) by doing an advanced search for people and population 
+#in Metropolitan Statistical Area/Micropolitan Statistical Area. There are two versions of this data: one created using data
+#collected over the past five years and one created using data over the past year. While the one year data is more accurate 
+#because it was collected more recently, not all areas will have data collected in teh past year. Therefore, for our 
+#analysis, I use the five year data, so I can capture more areas in my estimate. You can learn more about the difference 
+#between the two datasets here: https://www.census.gov/programs-surveys/acs/guidance/estimates.html. If you decide to use 
+#the one year estimate instead, substitute "metropolitan_pop.csv" with "metropolitan_pop_1yr.csv."
+
+##Set the working directory to the geographies folder.
+setwd("/Users/MeganDavis/Documents/r_code/geographies/")
+
+##Load in the U.S. Metropolitan and Micropolitan Statistical Area shapefile.
+met.shp <- readOGR("metro_areas/tl_2018_us_cbsa.shp")
+
+##Set the working directory to the coastal cities project folder.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+##Read in the Metropolitan/Micropolitan Statistical Area data. Remove the extra row of column labels. Select just the name
+#of the Statistical Area with its 2018 population, male population and female population. Convert all columns to characters
+#so we don't have to deal with factors.
+met.df <- read.csv(file = "metropolitan_pop.csv", header = TRUE, sep = ",") %>%
+  filter(!as.character(GEO_ID) %in% "id") %>%
+  select(NAME, "pop_2018" = S0101_C01_001E, "pop_male" = S0101_C03_001E, "pop_female" = S0101_C05_001E) %>%
+  mutate(NAME = as.character(NAME),
+         pop_2018 = as.character(pop_2018),
+         pop_male = as.character(pop_male),
+         pop_female = as.character(pop_female),
+         row_num = row_number())
+
+##Create an empty dataframe that will hold a list of Metropolitan Statistical Areas and all Micropolitan Statistical Areas
+#that fall in a coastal county.
+coast_met.df <- data.frame("Name" = NA, "Coastal" = NA)
 
 
-##using 5 year estimates but should talk to Ayana to see if she'd prefer otherwise...
 
 
 
@@ -426,10 +466,6 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Are
 
 
 
-
-
-
-#Urbanized Area and Urban Cluster 2018 population data: https://data.census.gov/cedsci/advanced?g=0100000US.400000.
 
 ##SAVE THIS AT THE END
 
