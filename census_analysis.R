@@ -100,7 +100,9 @@ coastal_cities <- data.frame("Definition" = c("Incorporated Urban Area", "Incorp
                                               "Urban Area", "Urban Area or Cluster", "Metropolitan Area",
                                               "Metropolitan or Micropolitan Area"), 
                              Coastal_City_Population = NA, 
-                             US_Population_Proportion = NA)
+                             US_Population_Proportion = NA,
+                             People_of_Color = NA,
+                             Proportion_of_Color = NA)
 
 #-----------------------------------------#
 ##### LOAD AND MANIPULATE CITIES DATA #####
@@ -275,6 +277,13 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Incorpora
                                          coastal_cities$Definition %in% "Incorporated Urban Area or Cluster"] <- 
   as.numeric(sum(inc.df$Population.Estimate..as.of.July.1....2018))
 
+##The caculation of how many people living in coastal cities are people of color was originally done directly in the 
+#coastal cities master spreadsheet. I eventually plan to move that portion of the analysis into this code, but for now the 
+#number of people living in coastal cities who are people of color came out to be 31,149,833. Load this number into the 
+#coastal_cities dataframe.
+coastal_cities$People_of_Color[coastal_cities$Definition %in% "Incorporated Urban Area" | 
+                                 coastal_cities$Definition %in% "Incorporated Urban Area or Cluster"] <- 31149833
+
 #-------------------------------------------#
 ##### CREATE COASTAL COUNTIES SHAPEFILE #####
 #-------------------------------------------#
@@ -404,6 +413,48 @@ coast_urban.df <- left_join(coast_urban.df, urban.df[1:4], by = c("Name" = "NAME
          pop_male = as.numeric(pop_male),
          pop_female = as.numeric(pop_female))
 
+#----------------------------------------------#
+##### DETERMINE PROPORTION PEOPLE OF COLOR #####
+#----------------------------------------------#
+
+##This section of code pulls in information on the number of people in Urbanized Areas and Urban Clusters in 2018 who can 
+#be classified as white alone and uses that number to calculate the number of people living in coastal Urbanized Areas or
+#Urban Clusters who identify as people of color. The Urbanized Area and Urban Cluster white alone data is pulled from the
+#census data portal (https://data.census.gov/cedsci/) by doing an advanced search for race and ethnicity in urban areas.
+#Be sure to select the table that's white alone, not Hispanic or Latino. There are two versions of this data: one created 
+#using data collected over the past five years and one created using data over the past year. The table used should match 
+#the table type used to pull the urban population data. In this case that is the five year data. If you decide to use the 
+#one year estimate instead, substitute "urban_white.csv" with "urban_white_lyr.csv."
+
+##Pull in the data with the number of people living in  Urbanized Areas and Urban Clusters that can be categorized as white
+#alone. Manipulate the dataframe to be in the same format as the coast_urban.df dataframe and join it to that dataframe 
+#using the Name/NAME columns. Subtract the white alone values from the total population values to determine the number of 
+#people living in coastal Urbanized Areas or Urban Clusters who can be categorized as people of color.
+coast_urban.df <- left_join(coast_urban.df,
+                            read.csv(file = "urban_white.csv", header = TRUE, sep = ",") %>%
+                              filter(!as.character(GEO_ID) %in% "id") %>%
+                              mutate(NAME = as.character(NAME),
+                                     NAME = str_remove(NAME, " [(]2010[])]"),
+                                     NAME = case_when(str_detect(NAME, "i�n|m�n")==T ~ str_replace(NAME, "�", "á"),
+                                                      str_detect(NAME, "i�n|m�n")==F ~ NAME),
+                                     NAME = case_when(str_detect(NAME, "a�o")==T ~ str_replace(NAME, "�", "ñ"),
+                                                      str_detect(NAME, "a�o")==F ~ NAME),
+                                     NAME = case_when(str_detect(NAME, "b�r")==T ~ str_replace(NAME, "�", "é"),
+                                                      str_detect(NAME, "b�r")==F ~ NAME),
+                                     NAME = case_when(str_detect(NAME, "D�a")==T ~ str_replace(NAME, "�", "í"),
+                                                      str_detect(NAME, "D�a")==F ~ NAME),
+                                     NAME = case_when(str_detect(NAME, "g�e")==T ~ str_replace(NAME, "�", "ü"),
+                                                      str_detect(NAME, "g�e")==F ~ NAME),
+                                     row_num = row_number()) %>%
+                              select(NAME, "white_2018" = B01001H_001E, "white_male" = B01001H_002E, 
+                                     "white_female" = B01001H_017E) %>%
+                              mutate(white_2018 = as.numeric(as.character(white_2018)),
+                                     white_male = as.numeric(as.character(white_male)),
+                                     white_female = as.numeric(as.character(white_female))), by = c("Name" = "NAME")) %>%
+  mutate(non_white_2018 = pop_2018 - white_2018,
+         non_white_male = pop_male - white_male,
+         non_white_female = pop_female - white_female)
+
 ##Save the coast_urban.df dataframe as a csv. The csv generated by this section of code is available at the U.S. Coastal 
 #Cities (UA/UC) tab of our coastal cities master spreadsheet
 #(https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing).
@@ -413,9 +464,18 @@ write.csv(coast_urban.df, "coastal_cities_pop_v2.csv")
 coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Area or Cluster"] <- 
   sum(coast_urban.df$pop_2018)
 
+##Calculate how many people of color are living in coastal Urbanized Areas or Urban Clusters. This comes out to 40,038,775
+#people.
+coastal_cities$People_of_Color[coastal_cities$Definition %in% "Urban Area or Cluster"] <-
+  sum(coast_urban.df$non_white_2018)
+
 ##Calculate the total population living in coastal Urbanized Areas. This comes out to 104,413,413 people.
 coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Area"] <-
   sum(coast_urban.df$pop_2018[str_detect(coast_urban.df$Name, "Urbanized Area")])
+
+##Calculate how many people of color are living in coastal Urbanized Areas. This comes out to 
+coastal_cities$People_of_Color[coastal_cities$Definition %in% "Urban Area"] <-
+  sum(coast_urban.df$non_white_2018[str_detect(coast_urban.df$Name, "Urbanized Area")])
 
 #---------------------------------------------------------#
 ##### IDENTIFY COASTAL METROPOLITAN STATISTICAL AREAS #####
@@ -517,7 +577,8 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Metropoli
 #-------------------------------------------------------------#
 
 ##This section of code determines the proportion of the U.S. population that lives in coastal cities according to each 
-#definition of coastal city.
+#definition of coastal city. It also determine what proportion of coastal city residents for each definition of coastal 
+#city identify as people of color.
 
 ##Read in a csv with yearly U.S. population statistics. This csv can be downloaded here:
 #https://www.census.gov/data/tables/time-series/demo/popest/2010s-national-total.html#par_textimage_2011805803
@@ -526,7 +587,8 @@ total_pop <- read.csv(file = "total_us_pop.csv", header = TRUE, sep = ",")
 ##Use the 2018 population estimate to calculate the proportion of Americans living in coastal cities under each definition.
 coastal_cities <- coastal_cities %>%
   mutate(US_Population_Proportion = Coastal_City_Population /
-           total_pop$POPESTIMATE2018[as.character(total_pop$NAME) %in% "United States"])
+           total_pop$POPESTIMATE2018[as.character(total_pop$NAME) %in% "United States"],
+         Proportion_of_Color = People_of_Color / Coastal_City_Population)
 
 ##Save the coastal_cities dataframe as a csv. The csv generated by this section of code is available at the U.S. Coastal 
 #Cities Population tab of our coastal cities master spreadsheet
