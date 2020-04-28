@@ -30,6 +30,7 @@ library(sp)
 library(rgeos)
 library(rgdal)
 library(leaflet)
+library(htmlwidgets)
 
 ##Set working directory. I store all of my shapefiles in a separate folder called geographies to avoid shapefile 
 #duplications across multiple projects.
@@ -595,7 +596,163 @@ coastal_cities <- coastal_cities %>%
 #(https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing).
 write.csv(coastal_cities, "coastal_cities_pop_comparison.csv")
 
-##To Do List Before Finishing code
+#--------------------------------------#
+##### CREATE MAP OF COASTAL CITIES #####
+#--------------------------------------#
 
-#   Add in code to map footprint of each measure of coastal cities so we can get an idea of the area covered.
-#   At the end of all this compile all the csvs needed to run this code into a zipped file.
+##This section of code creates a map of the area included in each definition of coastal cities.
+
+##Set the working directory to the coastal cities project folder.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+##Create an outline of a coastal cities map to be populated with all coastal cities shapefiles.
+coastal_cities.map <- leaflet() %>%
+  addProviderTiles("CartoDB.PositronNoLabels") 
+
+###METROPOLITAN OR MICROPOLITAN STATISTICAL AREAS
+
+##Merge the coast_met.df dataframe to the Metropolitan and Micropolitan Statistical Area shapefile.
+shp <- merge(met.shp, coast_met.df %>%
+               mutate(NAMELSAD = Name), by = c("NAMELSAD"))
+
+##Filter the shapefile to only include Metropolitan and Micropolitan Statistical Areas that are coastal.
+shp <- shp[is.na(shp@data$Coastal)==F,]
+
+##Add coastal Metropolitan and Micropolitan Statistical Areas to the coastal cities map.
+coastal_cities.map <- coastal_cities.map %>%
+  addPolygons(data = shp, fillColor = "yellow", fillOpacity = 1, stroke = FALSE)
+
+##Create a map of just coastal Metropolitan and Micropolitan Statistical Areas.
+save.map <- leaflet() %>%
+  addProviderTiles("CartoDB.PositronNoLabels") %>%
+  addPolygons(data = shp, fillColor = "lightblue", fillOpacity = 1, stroke = FALSE) %>%
+  addControl("Coastal Metropolitan or Micropolitan Area", position = c("topright"))
+
+##Save the map of coastal Metropolitan and Micropolitan Statistical Areas as an html widget.
+#saveWidget(save.map, file = "met_mic_coast.html")
+
+###METROPOLITAN STATISTICAL AREAS
+
+##Filter the coastal Metropolitan and Micropolitan Statistical Area shapefile to only include Metropolitan Statistical 
+#Areas.
+shp <- shp[str_detect(shp@data$NAMELSAD, "Metro Area")==T,]
+
+##Add coastal Metropolitan Statistical Areas to the coastal cities map.
+coastal_cities.map <- coastal_cities.map %>%
+  addPolygons(data = shp, fillColor = "gold", fillOpacity = 1, stroke = FALSE)
+
+##Create a map of just coastal Metropolitan Statistical Areas.
+save.map <- leaflet() %>%
+  addProviderTiles("CartoDB.PositronNoLabels") %>%
+  addPolygons(data = shp, fillColor = "lightblue", fillOpacity = 1, stroke = FALSE) %>%
+  addControl("Coastal Metropolitan Area", position = c("topright"))
+
+##Save the map of coastal Metropolitan Statistical Areas as an html widget.
+#saveWidget(save.map, file = "met_coast.html")
+
+###URBANIZED AREA OR URBAN CLUSTER
+
+##Merge the coast_urban.df dataframe to the Urbanized Area and Urban Cluster shapefile.
+shp <- merge(urban.shp, coast_urban.df %>%
+               mutate(NAMELSAD10 = Name), by = c("NAMELSAD10"))
+
+##Filter the shapefile to only include Urbanized Areas and Urban Clusters that are coastal.
+shp <- shp[is.na(shp@data$Coastal)==F,]
+
+##Add coastal Urbanized Areas and Urban Clusters to the coastal cities map.
+coastal_cities.map <- coastal_cities.map %>%
+  addPolygons(data = shp, fillColor = "orange", fillOpacity = 1, stroke = FALSE)
+
+##Create a map of just coastal Urbanized Areas and Urban Clusters.
+save.map <- leaflet() %>%
+  addProviderTiles("CartoDB.PositronNoLabels") %>%
+  addPolygons(data = shp, fillColor = "lightblue", fillOpacity = 1, stroke = FALSE) %>%
+  addControl("Coastal Urban Area or Cluster", position = c("topright"))
+
+##Save the map of coastal Urbanized Areas and Urban Clusters as an html widget.
+#saveWidget(save.map, file = "urban_uac.html")
+
+###URBANIZED AREA
+
+##Merge the coast_urban.df dataframe to the Urbanized Area shapefile.
+shp <- merge(ua.shp, coast_urban.df %>%
+               mutate(NAMELSAD10 = Name), by = c("NAMELSAD10"))
+
+##Filter the shapefile to only include Urbanized Areas that are coastal.
+shp <- shp[is.na(shp@data$Coastal)==F,]
+
+##Add coastal Urbanized Areas to the coastal cities map.
+coastal_cities.map <- coastal_cities.map %>%
+  addPolygons(data = shp, fillColor = "orangered", fillOpacity = 1, stroke = FALSE)
+
+##Create a map of just coastal Urbanized Areas and Urban Clusters.
+save.map <- leaflet() %>%
+  addProviderTiles("CartoDB.PositronNoLabels") %>%
+  addPolygons(data = shp, fillColor = "lightblue", fillOpacity = 1, stroke = FALSE) %>%
+  addControl("Coastal Urban Area", position = c("topright"))
+
+##Save the map of coastal Urbanized Areas as an html widget.
+#saveWidget(save.map, file = "urban_ua.html")
+
+###INCORPORATED PLACES
+
+##Create the outline for the coastal Incorporated Place map to be populated.
+save.map <- leaflet() %>%
+  addProviderTiles("CartoDB.PositronNoLabels")
+
+for(i in 1:nrow(state.df)){
+  
+  ##Determine the state name for the current iteration of the loop.
+  state <- state.df$State[state.df$row_num==i]
+  
+  ##Filter the incorporated places dataframe to only include results from the relevant state.
+  state.c <- inc.df %>%
+    filter(State %in% state)
+  
+  ##Set the working directory to the folder that contains the corresponding state's shapefile.
+  setwd(paste0("/Users/MeganDavis/Documents/r_code/geographies/states/", state))
+  
+  ##Load the state shapefile.
+  state.s <- readOGR(paste0(state, ".shp"))
+  
+  ##Merge the state shapefile to the filtered incorporated place dataframe.
+  state.s <- merge(state.s, state.c %>%
+                     mutate(NAME = City), by = c("NAME"))
+  
+  ##Filter the state shapefile to only include incorporated places that are included in the filtered incorporated place
+  #dataframe.
+  state.s <- state.s[is.na(state.s@data$State)==F,]
+  
+  ##Filter out any CDPs, we only want cities or villages.
+  state.s <- state.s[!str_detect(state.s@data$NAMELSAD, "CDP"),]
+  
+  ##Add all coastal incorporated places for the relevant state to the coastal cities map.  
+  coastal_cities.map <- coastal_cities.map %>%
+    addPolygons(data = state.s, fillColor = "darkred", fillOpacity = 1, stroke = FALSE)
+  
+  ##Add all coastal incorporated places for the relevant state to the coastal incorporated place map.
+  save.map <- save.map %>%
+    addPolygons(data = state.s, fillColor = "lightblue", fillOpacity = 1, stroke = FALSE)
+}
+
+##Create a dataframe that will be used to create a legend.
+legend.df <- data.frame("Name" = c("Incorporated Place", "Urbanized Area", "Urban Cluster", "Metropolitan Area", 
+                                   "Micropolitan Area"), "Color" = c("darkred", "orangered", "orange", "gold", "yellow"))
+
+##Add a label to the coastal incorporated place map
+save.map <- save.map %>%
+  addControl("Coastal Incorporated Places", position = c("topright"))
+
+##Reset the working directory to the coastal cities project folder.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+##Save the coastal Incorporated Places map as an html widget.
+#saveWidget(save.map, file = "incorp_coast.html")
+
+##Add a legend and a label to the coastal cities map.
+coastal_cities.map <- coastal_cities.map %>%
+  addLegend(colors = legend.df$Color, labels = legend.df$Name, position = "bottomright") %>%
+  addControl("Footprint of U.S. Coastal Cities", position = c("topright"))
+
+##Save the coastal cities map as an html widget.
+#saveWidget(coastal_cities.map, file = "coastal_cities.html")
