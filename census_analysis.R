@@ -123,7 +123,7 @@ setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 
 ##Read in the incorporated places csv. Convert State, City, County, and Region columns to characters for easy data
 #manipulation.
-inc.df <- read.csv(file = "incorporated_places.csv", header = TRUE, sep = ",") %>%
+inc.df <- read.csv(file = "data/incorporated_places.csv", header = TRUE, sep = ",") %>%
   mutate(State = as.character(State),
          City = as.character(City),
          County = as.character(County),
@@ -301,7 +301,7 @@ setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 #counties in the spreadsheet. My edited version is available under the U.S. Coastal Counties tab of the master spreadsheet:
 #https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing. The Coastal.County
 #and State columns are renamed in order to bind this information to the county shapefile.
-coast_county.df <- read.csv(file = "coastal_counties.csv", header = TRUE, sep = ",") %>%
+coast_county.df <- read.csv(file = "data/coastal_counties.csv", header = TRUE, sep = ",") %>%
   mutate(Coastal.County = as.character(Coastal.County),
          State = as.character(State),
          Region = as.character(Region)) %>%
@@ -356,7 +356,7 @@ setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 #"(2010)" from the end of the Urbanized Area/Cluster name. There is also an issue where county names with accents did not
 #load properly. The section of code with all of the case_when statements remedies this issue. Add row numbers. Convert
 #all of the population stats to characters so we don't have to deal with factors.
-urban.df <- read.csv(file = "urban_pop.csv", header = TRUE, sep = ",") %>%
+urban.df <- read.csv(file = "data/urban_pop.csv", header = TRUE, sep = ",") %>%
   filter(!as.character(GEO_ID) %in% "id") %>%
   mutate(NAME = as.character(NAME),
          NAME = str_remove(NAME, " [(]2010[])]"),
@@ -432,7 +432,7 @@ coast_urban.df <- left_join(coast_urban.df, urban.df[1:4], by = c("Name" = "NAME
 #using the Name/NAME columns. Subtract the white alone values from the total population values to determine the number of 
 #people living in coastal Urbanized Areas or Urban Clusters who can be categorized as people of color.
 coast_urban.df <- left_join(coast_urban.df,
-                            read.csv(file = "urban_white.csv", header = TRUE, sep = ",") %>%
+                            read.csv(file = "data/urban_white.csv", header = TRUE, sep = ",") %>%
                               filter(!as.character(GEO_ID) %in% "id") %>%
                               mutate(NAME = as.character(NAME),
                                      NAME = str_remove(NAME, " [(]2010[])]"),
@@ -506,7 +506,7 @@ setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 #of the Statistical Area with its 2018 population, male population and female population. Convert all columns to characters
 #so we don't have to deal with factors. There is also an issue where county names with accents did not load properly. The 
 #section of code with all of the case_when statements remedies this issue.
-met.df <- read.csv(file = "metropolitan_pop.csv", header = TRUE, sep = ",") %>%
+met.df <- read.csv(file = "data/metropolitan_pop.csv", header = TRUE, sep = ",") %>%
   filter(!as.character(GEO_ID) %in% "id") %>%
   select(NAME, "pop_2018" = S0101_C01_001E, "pop_male" = S0101_C03_001E, "pop_female" = S0101_C05_001E) %>%
   mutate(NAME = as.character(NAME),
@@ -583,7 +583,7 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Metropoli
 
 ##Read in a csv with yearly U.S. population statistics. This csv can be downloaded here:
 #https://www.census.gov/data/tables/time-series/demo/popest/2010s-national-total.html#par_textimage_2011805803
-total_pop <- read.csv(file = "total_us_pop.csv", header = TRUE, sep = ",")
+total_pop <- read.csv(file = "data/total_us_pop.csv", header = TRUE, sep = ",")
 
 ##Use the 2018 population estimate to calculate the proportion of Americans living in coastal cities under each definition.
 coastal_cities <- coastal_cities %>%
