@@ -4,16 +4,15 @@
 
 ##This analysis is intended to determine the number of Americans living in coastal cities. While our definition of coastal
 #is static - any area that falls within a census-designated coastal county - because the definition of what constitutes a
-#city is so fluid, we employ five different definitions: an incoporated place within an Urbanized Area, an incorporated 
+#city is so fluid, we employ five different definitions: an incorporated place within an Urbanized Area, an incorporated 
 #place within an Urbanized Area or Cluster, an Urban Area, an Urban Cluster or Urban Area, and a Metropolitan Area. Our 
-#published piece **INSERT TITLE HERE** adheres to the definition of a city as an incorporated place within an Urbanized 
-#Area.
+#published piece **INSERT TITLE HERE** adheres to the definition of a city as an Urbanized Area.
 
 #----------------#
 ##### SET UP #####
 #----------------#
 
-##Prepare workspace for analysis. The Urban Area shapefile can be downloaded here: 
+##Prepare work space for analysis. The Urban Area shapefile can be downloaded here: 
 #https://catalog.data.gov/dataset/tiger-line-shapefile-2018-2010-nation-u-s-2010-census-urban-area-national. All state 
 #level incorporated place shapefiles can be downloaded here: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/.
 
@@ -278,7 +277,7 @@ coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Incorpora
                                          coastal_cities$Definition %in% "Incorporated Urban Area or Cluster"] <- 
   as.numeric(sum(inc.df$Population.Estimate..as.of.July.1....2018))
 
-##The caculation of how many people living in coastal cities are people of color was originally done directly in the 
+##The calculation of how many people living in coastal cities are people of color was originally done directly in the 
 #coastal cities master spreadsheet. I eventually plan to move that portion of the analysis into this code, but for now the 
 #number of people living in coastal cities who are people of color came out to be 31,149,833. Load this number into the 
 #coastal_cities dataframe.
@@ -422,17 +421,22 @@ coast_urban.df <- left_join(coast_urban.df, urban.df[1:4], by = c("Name" = "NAME
 #be classified as white alone and uses that number to calculate the number of people living in coastal Urbanized Areas or
 #Urban Clusters who identify as people of color. The Urbanized Area and Urban Cluster white alone data is pulled from the
 #census data portal (https://data.census.gov/cedsci/) by doing an advanced search for race and ethnicity in urban areas.
-#Be sure to select the table that's white alone, not Hispanic or Latino. There are two versions of this data: one created 
-#using data collected over the past five years and one created using data over the past year. The table used should match 
-#the table type used to pull the urban population data. In this case that is the five year data. If you decide to use the 
-#one year estimate instead, substitute "urban_white.csv" with "urban_white_lyr.csv."
+#There are two classifications of "White alone": there is the broader category of "White alone" and
+#the more selective category of "White alone, not Hispanic or Latino." For this analysis we are using the classification
+#of "White alone, not Hispanic or Latino." There are two versions of this data: one created using data collected over the 
+#past five years and one created using data over the past year. The table used should match the table type used to pull the 
+#urban population data. In this case that is the five year data. If you decide to use the one year estimate instead, 
+#substitute "urban_white_nhl.csv" with "urban_white_lyr_nhl.csv." In addition, should you chose to repeat this analysis 
+#using the "White alone" classification, simply select "urban_white.csv" or "urban_white_1yr," according to your desired
+#data structure.
 
-##Pull in the data with the number of people living in  Urbanized Areas and Urban Clusters that can be categorized as white
-#alone. Manipulate the dataframe to be in the same format as the coast_urban.df dataframe and join it to that dataframe 
-#using the Name/NAME columns. Subtract the white alone values from the total population values to determine the number of 
-#people living in coastal Urbanized Areas or Urban Clusters who can be categorized as people of color.
+##Pull in the data with the number of people living in  Urbanized Areas and Urban Clusters that can be categorized as "White
+#alone, not Hispanic or Latino." Manipulate the dataframe to be in the same format as the coast_urban.df dataframe and join 
+#it to that dataframe using the Name/NAME columns. Subtract the white alone values from the total population values to 
+#determine the number of people living in coastal Urbanized Areas or Urban Clusters who can be categorized as people of 
+#color.
 coast_urban.df <- left_join(coast_urban.df,
-                            read.csv(file = "data/urban_white.csv", header = TRUE, sep = ",") %>%
+                            read.csv(file = "data/urban_white_nhl.csv", header = TRUE, sep = ",") %>%
                               filter(!as.character(GEO_ID) %in% "id") %>%
                               mutate(NAME = as.character(NAME),
                                      NAME = str_remove(NAME, " [(]2010[])]"),
