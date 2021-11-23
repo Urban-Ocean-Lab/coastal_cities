@@ -1,0 +1,781 @@
+State,City,County
+New York,New York,"New York County, Kings County, Bronx County, Richmond County, Queens County"
+California,Los Angeles,Los Angeles County
+Illinois,Chicago,Cook County
+Texas,Houston,Harris County
+Arizona,Phoenix,Maricopa County
+Pennsylvania,Philadelphia,Philidelphia County
+Texas,San Antonio,Bexar County
+California,San Diego,San Diego County
+Texas,Dallas,"Dallas County, Collin County, Denton County, Kaufman County, Rockwall County"
+California,San Jose,Santa Clara County
+Texas,Austin,Travis County
+Florida,Jacksonville,Duval County
+Texas,Fort Worth,Tarrant County
+Ohio,Columbus,Bartholomew County
+California,San Francisco,San Francisco County
+North Carolina,Charlotte,Mecklenburg County
+Indiana,Indianapolis,Marion County
+Washington,Seattle,King County
+Colorado,Denver,Denver County
+District of Columbia,Washington,N/A
+Massachusetts,Boston,Suffolk County
+Texas,El Paso,El Paso County
+Michigan,Detroit,Wayne County
+Tennessee,Nashville,Davidson County
+Oregon,Portland,Multnomah County
+Tennessee,Memphis,Shelby County
+Oklahoma,Oklahoma City,"Oklahoma County, Canadian County, Cleveland County, Pottawatomie County"
+Nevada,Las Vegas,Clark County
+Kentucky,Louisville,Jefferson County
+Maryland,Baltimore,Baltimore County
+Wisconsin,Milwaukee,Milwaukee County
+New Mexico,Albuquerque,Bernalillo County
+Arizona,Tucson,Pima County
+California,Fresno,Fresno County
+Arizona,Mesa,Maricopa County
+California,Sacramento,Sacramento County
+Georgia,Atlanta,Fulton County
+Missouri,Kansas City,"Jackson County, Clay County, Platte County, Cass County"
+Colorado,Colorado Springs,El Paso County
+Florida,Miami,Miami-Dade County
+North Carolina,Raleigh,Wake County
+Nebraska,Omaha,Douglas County
+California,Long Beach,Los Angeles County
+Virginia,Virginia Beach,Virginia Beach city
+California,Oakland,Alameda County
+Minnesota,Minneapolis,Hennepin County
+Oklahoma,Tulsa,"Osage County, Rogers County, Tulsa County, Wagoner County"
+Texas,Arlington,Tarrant County
+Florida,Tampa,Hillsborough County
+Louisiana,New Orleans,Orleans Parish
+Kansas,Wichita,Sedgwick County
+Ohio,Cleveland,Cuyahoga County
+California,Bakersfield,Kern County
+Colorado,Aurora,Arapahoe County
+California,Anaheim,Orange County
+Hawaii,Honolulu,Honolulu County
+California,Santa Ana,Orange County
+California,Riverside,Riverside County
+Texas,Corpus Christi,Nueces County
+Kentucky,Lexington,Fayette County
+California,Stockton,San Joaquin County
+Nevada,Henderson,Clark County
+Minnesota,St. Paul,Ramsey County
+Missouri,St. Louis,N/A
+Ohio,Cincinnati,Hamilton County
+Pennsylvania,Pittsburgh,Allegheny County
+North Carolina,Greensboro,Guilford County
+Alaska,Anchorage,Anchorage Borough
+Texas,Plano,Collin County
+Nebraska,Lincoln,Lancaster County
+Florida,Orlando,Orange County
+California,Irvine,Orange County
+New Jersey,Newark,Essex County
+Ohio,Toledo,Lucas County
+North Carolina,Durham,Durham County
+California,Chula Vista,San Diego County
+Indiana,Fort Wayne,Allen County
+New Jersey,Jersey City,Hudson County
+Florida,St. Petersburg,Pinellas County
+Texas,Laredo,Webb County
+Wisconsin,Madison,Dane County
+Arizona,Chandler,Maricopa County
+New York,Buffalo,Erie County
+Texas,Lubbock,Lubbock County
+Arizona,Scottsdale,Maricopa County
+Nevada,Reno,Washoe County
+Arizona,Glendale,Maricopa County
+Arizona,Gilbert,Maricopa County
+North Carolina,Winston-Salem,Forsyth County
+Nevada,North Las Vegas,Clark County
+Virginia,Norfolk,Norfolk city
+Virginia,Chesapeake,Norfolk County
+Texas,Garland,Dallas County
+Texas,Irving,Dallas County
+Florida,Hialeah,Miami-Dade County
+California,Fremont,Alameda County
+Idaho,Boise,Ada County
+Virginia,Richmond,Henrico county
+Louisiana,Baton Rouge,East Baton Rouge Parish
+Washington,Spokane,Spokane County
+Iowa,Des Moines,"Polk County, Warren County"
+Washington,Tacoma,Pierce County
+California,San Bernardino,San Bernardino County
+California,Modesto,Stanislaus County
+California,Fontana,San Bernardino County
+California,Santa Clarita,Los Angeles County
+Alabama,Birmingham,Jefferson County
+California,Oxnard,Ventura County
+North Carolina,Fayetteville,Cumberland County
+California,Moreno Valley,Riverside County
+New York,Rochester,Monroe County
+California,Glendale,Los Angeles County
+California,Huntington Beach,Orange County
+Utah,Salt Lake City,Salt Lake County
+Michigan,Grand Rapids,Kent County
+Texas,Amarillo,Potter County
+New York,Yonkers,Westchester County
+Illinois,Aurora,DuPage County
+Alabama,Montgomery,Montgomery County
+Ohio,Akron,Summit County
+Arkansas,Little Rock,Pulaski County
+Alabama,Huntsville,Madison County
+Georgia,Augusta,Richmond County
+Florida,Port St. Lucie,St. Lucie County
+Texas,Grand Prairie,"Dallas County, Tarrant County, Ellis County"
+Georgia,Columbus,Muscogee County
+Florida,Tallahassee,Leon County
+Kansas,Overland Park,Johnson County
+Arizona,Tempe,Maricopa County
+Texas,McKinney,Collin County
+Alabama,Mobile,Mobile County
+Florida,Cape Coral,Lee County
+Louisiana,Shreveport,Caddo Parish
+Texas,Frisco,"Collin County, Denton County"
+Tennessee,Knoxville,Knox County
+Massachusetts,Worcester,Worcester County
+Texas,Brownsville,Cameron County
+Washington,Vancouver,Clark County
+Florida,Fort Lauderdale,Broward County
+South Dakota,Sioux Falls,Minnehaha County
+California,Ontario,San Bernardino County
+Tennessee,Chattanooga,Hamilton County
+Rhode Island,Providence,Providence County
+Virginia,Newport News,Newport News city
+California,Rancho Cucamonga,San Bernardino County
+California,Santa Rosa,Sonoma County
+California,Oceanside,San Diego County
+Oregon,Salem,Marion County
+California,Elk Grove,Sacramento County
+California,Garden Grove,Orange County
+Florida,Pembroke Pines,Broward County
+Arizona,Peoria,"Maricopa County, Yavapai County"
+Oregon,Eugene,Lane County
+California,Corona,Riverside County
+North Carolina,Cary,"Wake County, Chatham County"
+Missouri,Springfield,Greene County
+Colorado,Fort Collins,Larimer County
+Mississippi,Jackson,Hinds County
+Virginia,Alexandria,Alexandria City
+California,Hayward,Alameda County
+California,Lancaster,Los Angeles County
+Colorado,Lakewood,Jefferson County
+Tennessee,Clarksville,Montgomery County
+California,Palmdale,Los Angeles County
+California,Salinas,Monterey County
+Massachusetts,Springfield,Hampden County
+Florida,Hollywood,Broward County
+Texas,Pasadena,Harris County
+California,Sunnyvale,Santa Clara County
+Georgia,Macon,Bibb County
+Kansas,Kansas City,Wyandotte County
+California,Pomona,Los Angeles County
+California,Escondido,San Diego County
+Texas,Killeen,Bell County
+Illinois,Naperville,Dupage County
+Illinois,Joliet,Will County
+Washington,Bellevue,King County
+Illinois,Rockford,Winnebago County
+Georgia,Savannah,Chatham County
+New Jersey,Paterson,Passaic County
+California,Torrance,Los Angeles County
+Connecticut,Bridgeport,Fairfield County
+Texas,McAllen,Hidalgo County
+Texas,Mesquite,"Dallas County, Kaufman County"
+New York,Syracuse,Onondaga County
+Texas,Midland,"Midland County, Martin County"
+California,Pasadena,Los Angeles County
+Tennessee,Murfreesboro,Rutherford County
+Florida,Miramar,Broward County
+Ohio,Dayton,Montgomery County
+California,Fullerton,Orange County
+Kansas,Olathe,Johnson County
+California,Orange,Orange County
+Colorado,Thornton,Adams County
+California,Roseville,Placer County
+Texas,Denton,Denton County
+Texas,Waco,McLennan County
+Arizona,Surprise,Maricopa County
+Texas,Carrollton,"Denton County, Dallas County, Collin County"
+Utah,West Valley City,Salt Lake County
+South Carolina,Charleston,Charleston County
+Michigan,Warren,Macomb County
+Virginia,Hampton,Hampton city
+Florida,Gainesville,Alachua County
+California,Visalia,Tulare County
+Florida,Coral Springs,Broward County
+South Carolina,Columbia,Richland County
+Iowa,Cedar Rapids,Linn County
+Michigan,Sterling Heights,Macomb County
+Connecticut,New Haven,New Haven County
+Connecticut,Stamford,Fairfield County
+California,Concord,Contra Costa County
+Washington,Kent,King County
+California,Santa Clara,Santa Clara County
+New Jersey,Elizabeth,Union County
+Texas,Round Rock,Williamson County
+California,Thousand Oaks,Ventura County
+Louisiana,Lafayette,Lafayette Parish
+Georgia,Athens,Clarke County
+Kansas,Topeka,Shawnee County
+California,Simi Valley,Ventura County
+North Dakota,Fargo,Cass County
+Oklahoma,Norman,Cleveland County
+Missouri,Columbia,Boone County
+Texas,Abilene,Taylor County
+North Carolina,Wilmington,New Hanover County
+Connecticut,Hartford,Hartford County
+California,Victorville,San Bernardino County
+Texas,Pearland,"Brazoria County, Fort Bend County, Harris County"
+California,Vallejo,Solano County
+Michigan,Ann Arbor,Washtenaw County
+California,Berkeley,Alameda County
+Pennsylvania,Allentown,Lehigh County
+Texas,Richardson,"Dallas County, Collin County"
+Texas,Odessa,Ector County
+Colorado,Arvada,"Jefferson County, Adams County"
+Massachusetts,Cambridge,Middlesex County
+Texas,Sugar Land,Fort Bend County
+Texas,Beaumont,Jefferson County
+Michigan,Lansing,Ingham County
+Indiana,Evansville,Vanderburgh County
+Minnesota,Rochester,Olmsted County
+Missouri,Independence,Jackson County
+California,Fairfield,Solano County
+Utah,Provo,Utah County
+Florida,Clearwater,Pinellas County
+Texas,College Station,Brazos County
+Utah,West Jordan,Salt Lake County
+California,Carlsbad,San Diego County
+California,El Monte,Los Angeles County
+California,Murrieta,Riverside County
+California,Temecula,Riverside County
+Illinois,Springfield,Sangamon County
+Florida,Palm Bay,Brevard County
+California,Costa Mesa,Orange County
+Colorado,Westminster,"Adams County, Jefferson County"
+South Carolina,North Charleston,"Berkeley County, Charleston County, Dorchester County"
+Florida,Miami Gardens,Miami-Dade County
+New Hampshire,Manchester,Hillsborough County
+North Carolina,High Point,"Guilford County, Randolph County, Davidson County, Forsyth County"
+California,Downey,Los Angeles County
+California,Clovis,Fresno County
+Florida,Pompano Beach,Broward County
+Colorado,Pueblo,Pueblo County
+Illinois,Elgin,Kane County
+Massachusetts,Lowell,Middlesex County
+California,Antioch,Contra Costa County
+Florida,West Palm Beach,Palm Beach County
+Illinois,Peoria,Peoria County
+Washington,Everett,Snohomish County
+California,San Buenaventura (Ventura),Ventura County
+Colorado,Centennial,Arapahoe County
+Florida,Lakeland,Polk County
+Oregon,Gresham,Multnomah County
+California,Richmond,Contra Costa County
+Montana,Billings,Yellowstone County
+California,Inglewood,Los Angeles County
+Oklahoma,Broken Arrow,"Tulsa County, Wagoner County"
+Georgia,Sandy Springs,Fulton County
+California,Jurupa Valley,Riverside County
+Oregon,Hillsboro,Washington County
+Connecticut,Waterbury,New Haven County
+California,Santa Maria,Santa Barbara County
+Colorado,Boulder,Boulder County
+Colorado,Greeley,Weld County
+California,Daly City,San Mateo County
+Idaho,Meridian,Ada County
+Texas,Lewisville,Denton County
+Florida,Davie,Broward County
+California,West Covina,Los Angeles County
+Texas,League City,"Galveston County, Harris County"
+Texas,Tyler,Smith County
+California,Norwalk,Los Angeles County
+California,San Mateo,San Mateo County
+Wisconsin,Green Bay,Brown County
+Texas,Wichita Falls,Wichita County
+Nevada,Sparks,Washoe County
+California,Burbank,Los Angeles County
+California,Rialto,San Bernardino County
+Texas,Allen,Collin County
+California,El Cajon,San Diego County
+New Mexico,Las Cruces,Doña Ana County
+Washington,Renton,King County
+Iowa,Davenport,Scott County
+Indiana,South Bend,St. Joseph County
+California,Vista,San Diego County
+Alabama,Tuscaloosa,Tuscaloosa County
+Texas,San Angelo,Tom Green County
+Wisconsin,Kenosha,Kenosha County
+California,Vacaville,Solano County
+Virginia,Roanoke,Roanoke City
+Washington,Spokane Valley,Spokane County
+Florida,Boca Raton,Palm Beach County
+Oregon,Beaverton,Washington County
+Texas,Edinburg,Hidalgo County
+Missouri,Lee's Summit,"Jackson County, Cass County"
+New Mexico,Rio Rancho,Sandoval County
+Arizona,Yuma,Yuma County
+Oregon,Bend,Deschutes County
+Utah,Orem,Utah County
+Kansas,Lawrence,Douglas County
+New York,Albany,Albany County
+Georgia,South Fulton,Fulton County
+Washington,Federal Way,King County
+Utah,Sandy,Salt Lake County
+California,San Marcos,San Diego County
+California,Compton,Los Angeles County
+Colorado,Longmont,"Boulder County, Weld County"
+Pennsylvania,Erie,Erie County
+Idaho,Nampa,Canyon County
+Michigan,Flint,Genesee County
+Massachusetts,Brockton,Plymouth County
+Florida,Sunrise,Broward County
+Massachusetts,New Bedford,Bristol County
+California,Hesperia,San Bernardino County
+California,Mission Viejo,Orange County
+California,Chico,Butte County
+Massachusetts,Lynn,Essex County
+Georgia,Roswell,Fulton County
+Virginia,Portsmouth,Norfolk County
+Massachusetts,Quincy,Norfolk County
+California,South Gate,Los Angeles County
+Michigan,Dearborn,Wayne County
+Florida,Plantation,Broward County
+North Carolina,Concord,Cabarrus County
+Michigan,Livonia,Wayne County
+Washington,Yakima,Yakima County
+Indiana,Carmel,Hamilton County
+Indiana,Fishers,Hamilton County
+North Carolina,Greenville,Pitt County
+Oklahoma,Edmond,Oklahoma County
+Oklahoma,Lawton,Comanche County
+California,Menifee,Riverside County
+North Carolina,Asheville,Buncombe County
+Florida,Deltona,Volusia County
+California,Carson,Los Angeles County
+California,Tracy,San Joaquin County
+California,Redding,Shasta County
+Florida,Miami Beach,Miami-Dade County
+California,Chino,San Bernardino County
+California,Santa Monica,Los Angeles County
+California,Santa Barbara,Santa Barbara County
+California,Indio,Riverside County
+Virginia,Suffolk,Suffolk city
+California,Westminster,Orange County
+Washington,Bellingham,Whatcom County
+California,Livermore,Alameda County
+California,San Leandro,Alameda County
+Massachusetts,Fall River,Bristol County
+Washington,Kirkland,King County
+South Carolina,Mount Pleasant,Charleston County
+New Hampshire,Nashua,Hillsborough County
+Connecticut,Norwalk,Fairfield County
+Massachusetts,Newton,Middlesex County
+Pennsylvania,Reading,Berks County
+Missouri,O'Fallon,St. Charles County
+Illinois,Champaign,Champaign County
+California,Citrus Heights,Sacramento County
+Arkansas,Fort Smith,Sebastian County
+Texas,Conroe,Montgomery County
+Florida,Palm Coast,Flagler County
+Utah,Ogden,Weber County
+Utah,St. George,Washington County
+California,Hawthorne,Los Angeles County
+Illinois,Waukegan,Lake County
+Arkansas,Fayetteville,Washington County
+California,Redwood City,San Mateo County
+California,Whittier,Los Angeles County
+Minnesota,Duluth,St. Louis County
+Arizona,Avondale,Maricopa County
+California,Lake Forest,Orange County
+Minnesota,Bloomington,Hennepin County
+Texas,Bryan,Brazos County
+California,Newport Beach,Orange County
+California,Hemet,Riverside County
+New Jersey,Clifton,Passaic County
+Alabama,Hoover,Jefferson County
+Florida,Largo,Pinellas County
+Indiana,Bloomington,Monroe County
+Texas,Mission,Hidalgo County
+Connecticut,Danbury,Fairfield County
+California,Alhambra,Los Angeles County
+New Mexico,Santa Fe,Santa Fe County
+Texas,New Braunfels,"Comal County, Guadalupe County"
+Georgia,Johns Creek,Fulton County
+Michigan,Troy,Oakland County
+New Jersey,Trenton,Mercer County
+California,Chino Hills,San Bernardino County
+California,Mountain View,Santa Clara County
+California,Merced,Merced County
+Washington,Kennewick,Benton County
+Arizona,Goodyear,Maricopa County
+Florida,Melbourne,Brevard County
+California,Buena Park,Orange County
+Iowa,Sioux City,"Woodbury County, Plymouth County"
+California,Pleasanton,Alameda County
+Oregon,Medford,Jackson County
+Florida,Fort Myers,Lee County
+Virginia,Lynchburg,Lynchburg City
+Washington,Auburn,King County
+Michigan,Westland,Wayne County
+Texas,Longview,"Gregg County, Harrison County"
+Illinois,Cicero,Cook County
+California,Manteca,San Joaquin County
+Massachusetts,Somerville,Middlesex County
+Rhode Island,Cranston,Providence County
+Michigan,Farmington Hills,Oakland County
+Arkansas,Springdale,"Washington County, Benton County"
+Tennessee,Franklin,Williamson County
+Florida,Deerfield Beach,Broward County
+Rhode Island,Warwick,Kent County
+Minnesota,Brooklyn Park,Hennepin County
+California,Milpitas,Santa Clara County
+Massachusetts,Lawrence,Essex County
+California,Lakewood,Los Angeles County
+California,Tustin,Orange County
+Texas,Pharr,Hidalgo County
+Minnesota,Plymouth,Hennepin County
+California,Napa,Napa County
+California,Perris,Riverside County
+California,Folsom,Sacramento County
+Ohio,Parma,Cuyahoga County
+New York,New Rochelle,Westchester County
+California,Alameda,Alameda County
+Florida,Boynton Beach,Palm Beach County
+Louisiana,Lake Charles,Calcasieu Parish
+Illinois,Bloomington,McLean County
+Colorado,Loveland,Larimer County
+Wisconsin,Racine,Racine County
+Texas,Flower Mound,"Denton County, Tarrant County"
+Utah,Layton,Davis County
+Pennsylvania,Scranton,Lackawanna County
+California,Bellflower,Los Angeles County
+North Carolina,Gastonia,Gaston County
+Texas,Baytown,"Harris County, Chambers County"
+California,Upland,San Bernardino County
+Texas,Cedar Park,"Williamson County, Travis County"
+Arkansas,Jonesboro,Craighead County
+Michigan,Kalamazoo,Kalamazoo County
+Iowa,Iowa City,Johnson County
+Texas,Temple,Bell County
+Missouri,St. Joseph,Buchanan County
+California,San Ramon,Contra Costa County
+Michigan,Wyoming,Kent County
+California,Baldwin Park,Los Angeles County
+Georgia,Warner Robins,"Houston County, Peach County"
+Indiana,Hammond,Lake County
+Pennsylvania,Bethlehem,"Lehigh County, Northampton County"
+South Dakota,Rapid City,Pennington County
+Indiana,Gary,Lake County
+Georgia,Albany,Dougherty County
+Illinois,Arlington Heights,Cook County
+Illinois,Bolingbrook,"Will County, DuPage County"
+Washington,Pasco,Franklin County
+Texas,Missouri City,"Fort Bend County, Harris County"
+Michigan,Rochester Hills,Oakland County
+California,Rancho Cordova,Sacramento County
+California,Union City,Alameda County
+Wisconsin,Appleton,"Outagamie County, Calumet County, Winnebago County"
+Montana,Missoula,Missoula County
+Arizona,Buckeye,Maricopa County
+South Carolina,Rock Hill,York County
+Texas,Georgetown,Williamson County
+Utah,South Jordan,Salt Lake County
+Illinois,Evanston,Cook County
+New Jersey,Camden,Camden County
+Arizona,Flagstaff,Coconino County
+Florida,Kissimmee,Osceola County
+Illinois,Schaumburg,Cook County
+California,Apple Valley,San Bernardino County
+California,Turlock,Stanislaus County
+Michigan,Southfield,Oakland County
+Massachusetts,Framingham,Middlesex County
+North Dakota,Bismarck,Burleigh County
+North Carolina,Jacksonville,Onslow County
+Wisconsin,Waukesha,Waukesha County
+Connecticut,New Britain,Hartford County
+California,Pittsburg,Contra Costa County
+Indiana,Lafayette,Tippecanoe County
+Maryland,Frederick,Frederick County
+Florida,Lauderhill,Broward County
+Mississippi,Gulfport,Harrison County
+Rhode Island,Pawtucket,Providence County
+Minnesota,Maple Grove,Hennepin County
+California,Redlands,San Bernardino County
+Minnesota,Woodbury,Washington County
+Illinois,Decatur,Macon County
+Florida,Weston,Broward County
+Texas,Mansfield,"Tarrant county, Ellis County, Johnson County"
+Texas,North Richland Hills,Tarrant County
+Missouri,St. Charles,St. Charles County
+Delaware,Wilmington,New Castle County
+California,Lynwood,Los Angeles County
+Florida,Homestead,Miami-Dade County
+Ohio,Canton,Stark County
+New Jersey,Passaic,Passaic County
+California,Walnut Creek,Contra Costa County
+Washington,Marysville,Snohomish County
+Florida,Delray Beach,Palm Beach County
+California,Davis,Yolo County
+Colorado,Broomfield,Broomfield County
+California,Camarillo,Ventura County
+Florida,Daytona Beach,Volusia County
+Wisconsin,Eau Claire,Eau Claire County
+Florida,North Port,Sarasota County
+South Carolina,Greenville,Greenville County
+Indiana,Muncie,Delaware County
+New Jersey,Union City,Hudson County
+Kentucky,Bowling Green,Warren County
+Maryland,Gaithersburg,Montgomery County
+Maryland,Rockville,Montgomery County
+Alabama,Dothan,Houston County
+Louisiana,Bossier City,Bossier Parish
+California,Lake Elsinore,Riverside County
+Illinois,Palatine,Cook County
+Minnesota,St. Cloud,"Stearns County, Benton County, Sherburne County"
+Iowa,Waterloo,Black Hawk County
+California,Yorba Linda,Orange County
+California,South San Francisco,San Mateo County
+Washington,Redmond,King County
+Arkansas,Rogers,Benton County
+New York,Mount Vernon,Westchester County
+California,Redondo Beach,Los Angeles County
+California,Rocklin,Placer County
+Iowa,Ames,Story County
+Texas,Victoria,Victoria County
+California,Lodi,San Joaquin County
+California,Yuba City,Sutter County
+Tennessee,Jackson,Madison County
+Tennessee,Johnson City,"Washington County, Carter County, Sullivan County"
+Wisconsin,Oshkosh,Winnebago County
+California,Palo Alto,Santa Clara County
+Louisiana,Kenner,Jefferson Parish
+Iowa,West Des Moines,"Polk County, Dallas County, Warren County"
+Minnesota,Eagan,Dakota County
+Arkansas,Conway,Faulkner County
+Maine,Portland,Cumberland County
+Texas,Rowlett,"Dallas County, Rockwell County"
+California,Laguna Niguel,Orange County
+Georgia,Alpharetta,Fulton County
+Arkansas,North Little Rock,Pulaski County
+Florida,Tamarac,Broward County
+Utah,Lehi,Utah County
+Minnesota,Lakeville,Dakota County
+Kansas,Shawnee,Johnson County
+Alabama,Auburn,Lee County
+Washington,Sammamish,King County
+California,Madera,Madera County
+New York,Schenectady,Schenectady County
+Florida,Jupiter,Palm Beach County
+Texas,Harlingen,Cameron County
+Iowa,Ankeny,Polk County
+Minnesota,Blaine,"Anoka County, Ramsey County"
+Florida,Wellington,Palm Beach County
+New Jersey,Bayonne,Hudson County
+Ohio,Youngstown,Mahoning County
+California,San Clemente,Orange County
+Colorado,Castle Rock,Douglas County
+California,Eastvale,Riverside County
+California,Santa Cruz,Santa Cruz County
+Wisconsin,Janesville,Rock County
+California,Tulare,Tulare County
+New Jersey,East Orange,Essex County
+Texas,Pflugerville,Travis County
+Minnesota,Eden Prairie,Hennepin County
+Florida,Port Orange,Volusia County
+Massachusetts,Haverhill,Essex County
+Ohio,Lorain,Lorain County
+Wyoming,Cheyenne,Laramie County
+California,Brentwood,Contra Costa County
+Texas,San Marcos,Hays County
+California,Dublin,Alameda County
+Colorado,Grand Junction,Mesa County
+Illinois,Skokie,Cook County
+Indiana,Noblesville,Hamilton County
+Florida,North Miami,Miami-Dade County
+Oregon,Springfield,Lane County
+Massachusetts,Waltham,Middlesex County
+California,Encinitas,San Diego County
+California,Pico Rivera,Los Angeles County
+California,Montebello,Los Angeles County
+Minnesota,Coon Rapids,Anoka County
+Iowa,Council Bluffs,Pottawattamie County
+California,La Habra,Orange County
+Ohio,Hamilton,Butler County
+Oklahoma,Moore,Cleveland County
+California,Petaluma,Sonoma County
+Florida,Doral,Miami-Dade County
+Idaho,Idaho Falls,Bonneville County
+California,National City,San Diego County
+Florida,Coconut Creek,Broward County
+Utah,Millcreek,Salt Lake County
+Minnesota,Burnsville,Dakota County
+Michigan,Taylor,Wayne County
+Massachusetts,Malden,Middlesex County
+North Carolina,Chapel Hill,"Orange County, Chatham County, Durham County"
+Michigan,Novi,Oakland County
+Georgia,Marietta,Cobb County
+Indiana,Terre Haute,Vigo County
+Washington,Lakewood,Pierce County
+California,Woodland,Yolo County
+Florida,Ocala,Marion County
+California,Monterey Park,Los Angeles County
+Utah,Taylorsville,Salt Lake County
+California,Cupertino,Santa Clara County
+New York,Utica,Oneida County
+Florida,Sanford,Seminole County
+Connecticut,Bristol,Hartford County
+California,Porterville,Tulare County
+New Jersey,Vineland,Cumberland County
+Kentucky,Owensboro,Daviess County
+Michigan,Pontiac,Oakland County
+California,Gardena,Los Angeles County
+California,La Mesa,San Diego County
+Connecticut,Meriden,New Haven County
+Wisconsin,West Allis,Milwaukee County
+Michigan,Royal Oak,Oakland County
+Pennsylvania,Lancaster,Lancaster County
+Michigan,St. Clair Shores,Macomb County
+Tennessee,Bartlett,Shelby County
+Ohio,Springfield,Clark County
+Illinois,Des Plaines,Cook County
+Indiana,Greenwood,Johnson County
+California,Gilroy,Santa Clara County
+California,San Rafael,Marin County
+Montana,Great Falls,Cascade County
+Maryland,Bowie,Prince George's County
+Florida,Margate,Broward County
+Oregon,Corvallis,Benton County
+California,Arcadia,Los Angeles County
+Colorado,Commerce City,Adams County
+Illinois,Orland Park,"Cook County, Will County"
+California,Huntington Park,Los Angeles County
+California,Santee,San Diego County
+New York,White Plains,Westchester County
+Iowa,Dubuque,Dubuque County
+Indiana,Kokomo,Howard County
+Massachusetts,Medford,Middlesex County
+Florida,Sarasota,Sarasota County
+Massachusetts,Weymouth Town,Norfolk County
+Florida,Bradenton,Manatee County
+Tennessee,Hendersonville,Sumner County
+Wyoming,Casper,Natrona County
+Florida,Bonita Springs,Lee County
+Texas,Euless,Tarrant County
+Oklahoma,Midwest City,Oklahoma County
+Washington,Richland,Benton County
+Massachusetts,Taunton,Bristol County
+Arizona,Casa Grande,Pinal County
+Missouri,St. Peters,St. Charles County
+North Carolina,Huntersville,Mecklenburg County
+North Dakota,Grand Forks,Grand Forks County
+California,Hanford,Kings County
+Washington,Shoreline,King County
+Georgia,Smyrna,Cobb County
+Idaho,Caldwell,Canyon County
+Georgia,Valdosta,Lowndes County
+Florida,Palm Beach Gardens,Palm Beach County
+California,Diamond Bar,Los Angeles County
+Idaho,Pocatello,"Bannock County, Power County"
+Illinois,Tinley Park,"Cook County, Will County"
+Texas,Leander,"Williamson County, Travis County"
+New Jersey,New Brunswick,Middlesex County
+California,Fountain Valley,Orange County
+California,Novato,Marin County
+Colorado,Parker,Douglas County
+Michigan,Dearborn Heights,Wayne County
+Massachusetts,Chicopee,Hampden County
+Illinois,Oak Lawn,Cook County
+Nevada,Carson City,N/A
+California,Highland,San Bernardino County
+Kansas,Lenexa,Johnson County
+New York,Hempstead,Nassau County
+Missouri,Blue Springs,Jackson County
+Ohio,Kettering,"Montgomery County, Greene County"
+Arizona,Lake Havasu City,Mohave County
+Indiana,Anderson,Madison County
+Texas,Port Arthur,Jefferson County
+Kansas,Manhattan,"Riley County, Pottawatomie County"
+Mississippi,Southaven,DeSoto County
+Illinois,Berwyn,Cook County
+California,Cathedral City,Riverside County
+Connecticut,West Haven,New Haven County
+Oregon,Tigard,Washington County
+Illinois,Normal,McLean County
+California,Colton,San Bernardino County
+Georgia,Stonecrest,DeKalb County
+Oregon,Albany,"Linn County, Benton County"
+California,Rosemead,Los Angeles County
+California,Paramount,Los Angeles County
+Alabama,Decatur,"Morgan County, Limestone County"
+North Carolina,Rocky Mount,"Edgecombe County, Nash County"
+Illinois,Mount Prospect,Cook County
+Georgia,Brookhaven,DeKalb County
+Minnesota,Apple Valley,Dakota County
+Florida,St. Cloud,Osceola County
+Tennessee,Kingsport,"Sullivan County, Hawkins County"
+Virginia,Harrisonburg,Rockingham County
+Texas,Grapevine,"Tarrant County, Dallas County"
+Minnesota,Minnetonka,Hennepin County
+California,Watsonville,Santa Cruz County
+Virginia,Leesburg,Loudoun County
+Ohio,Elyria,Lorain County
+North Carolina,Apex,Wake County
+Massachusetts,Revere,Suffolk County
+North Carolina,Burlington,Alamance County
+California,West Sacramento,Yolo County
+California,Yucaipa,San Bernardino County
+Nebraska,Bellevue,Sarpy County
+Texas,DeSoto,Dallas County
+Florida,Apopka,Orange County
+New Jersey,Hoboken,Hudson County
+Massachusetts,Peabody,Essex County
+California,Palm Desert,Riverside County
+Illinois,Wheaton,DuPage County
+Connecticut,Milford,New Haven County
+Florida,Pinellas Park,Pinellas County
+California,Delano,Kern County
+New Jersey,West New York,Hudson County
+Florida,Pensacola,Escambia County
+Washington,Olympia,Thurston County
+Minnesota,Edina,Hennepin County
+Indiana,Elkhart,Elkhart County
+Illinois,Oak Park,Cook County
+California,Glendora,Los Angeles County
+New Jersey,Perth Amboy,Middlesex County
+Washington,Burien,King County
+Michigan,Kentwood,Kent County
+California,Aliso Viejo,Orange County
+South Carolina,Summerville,"Dorchester County, Berkeley County, Charleston County"
+California,Placentia,Orange County
+Utah,Logan,Cache County
+Texas,Wylie,"Collin County, Dallas County, Rockwall County"
+Wisconsin,La Crosse,La Crosse County
+Nebraska,Grand Island,Hall County
+Idaho,Coeur d'Alene,Kootenai County
+Missouri,Florissant,St. Louis County
+Michigan,Battle Creek,Calhoun County
+Illinois,Hoffman Estates,"Cook County, Kane County"
+Arkansas,Bentonville,Benton County
+Florida,Coral Gables,Miami-Dade County
+Tennessee,Smyrna,Rutherford County
+Washington,Lacey,Thurston County
+Massachusetts,Methuen Town,Essex County
+New Jersey,Plainfield,Union County
+Missouri,Joplin,"Jasper County, Newton County"
+Tennessee,Collierville,Shelby County
+California,Cerritos,Los Angeles County
+Texas,Galveston,Galveston County
+Alabama,Madison,"Limestone County, Madison County"
+Oklahoma,Stillwater,Payne County
+Texas,Little Elm,Denton County
+Ohio,Lakewood,Cuyahoga County
+Ohio,Newark,Licking County
+Arizona,Maricopa,Pinal County
+Oklahoma,Enid,Garfield County
+New York,Troy,Rensselaer County
+Michigan,Saginaw,Saginaw County
+New York,Niagara Falls,Niagara County
+West Virginia,Charleston,Kanawha County

@@ -2,7 +2,7 @@
 ### Megan Davis
 ### Urban Ocean Lab
 
-##This analysis is intended to determine the number of Americans living in coastal cities. While our definition of coastal
+## This analysis is intended to determine the number of Americans living in coastal cities. While our definition of coastal
 #is static - any area that falls within a census-designated coastal county - because the definition of what constitutes a
 #city is so fluid, we employ five different definitions: an incorporated place within an Urbanized Area, an incorporated 
 #place within an Urbanized Area or Cluster, an Urban Area, an Urban Cluster or Urban Area, and a Metropolitan Area. Our 
@@ -12,14 +12,14 @@
 ##### SET UP #####
 #----------------#
 
-##Prepare work space for analysis. The Urban Area shapefile can be downloaded here: 
+## Prepare work space for analysis. The Urban Area shapefile can be downloaded here: 
 #https://catalog.data.gov/dataset/tiger-line-shapefile-2018-2010-nation-u-s-2010-census-urban-area-national. All state 
 #level incorporated place shapefiles can be downloaded here: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/.
 
-##Clear the workspace.
+## Clear the workspace.
 rm(list = ls())
 
-##Load libraries.
+## Load libraries.
 library(rgdal)
 library(dplyr)
 library(stringr)
@@ -27,33 +27,39 @@ library(stringr)
 library(sf)
 library(sp)
 library(rgeos)
-library(rgdal)
 library(leaflet)
 library(htmlwidgets)
+library(tidyr)
 
-##Set working directory. I store all of my shapefiles in a separate folder called geographies to avoid shapefile 
+## Set working directory. I store all of my shapefiles in a separate folder called geographies to avoid shapefile 
 #duplications across multiple projects.
 setwd("/Users/MeganDavis/Documents/r_code/geographies")
 
-##Pull in Urban Area shapefile. This shapefile includes boundaries for Urban Clusters, places with 2.5 to 50 thousand
-#people per census block, and Urbanized Areas, places with more than 50 thousand people per census block.
+## Pull in Urban Area shapefile. This shapefile includes boundaries for Urban Clusters, places with 2.5 to 50 thousand
+#people per census block, and Urbanized Areas, places with more than 50 thousand people per census block. As Urban Area 
+#and Cluster boundaries remain static between decennial censuses, this shapefile will not need to be updated until after
+#the 2020 Census results are released.
 urban.shp <- readOGR("urban_area/tl_2018_us_uac10.shp")
 
-##Create a shapefile with just Urbanized Areas.
+## Create a shapefile with just Urbanized Areas.
 ua.shp <- urban.shp[str_detect(urban.shp@data$NAMELSAD10, "Urbanized Area"), ]
 
-##Though I am not pulling in the incorporated place shapefiles yet, it is important to ensure that these shapefiles are 
+## Though I am not pulling in the incorporated place shapefiles yet, it is important to ensure that these shapefiles are 
 #saved in a specific way in order for this program to run properly. Within my geographies folder I created another folder
 #called states. In this folder I have stored all of the unzipped incorporated place files, which can be downloaded from 
 #this site: https://www2.census.gov/geo/tiger/TIGER2016/PLACE/. DO NOT CHANGE THE NAME OF THE DOWNLOADED FILES.
 
-##Create a dataframe of all states in alphabetical order, followed by all U.S. territories in alphabetical order.
+## As the boundaries saved in these shapefiles are static between decennial censuses and we are not using any of the other
+#non-spatial data that may be stored in these shapefiles, even though these shapefiles are from 2016 they do not need to be
+#updated until after the 2020 Census results are released.
+
+## Create a dataframe of all states in alphabetical order, followed by all U.S. territories in alphabetical order.
 files <- rbind(rbind(data.frame(state.name), data.frame("state.name" = c("District of Columbia"))) %>%
   arrange(as.character(state.name)), data.frame("state.name" = c("American Samoa", "Guam", "Northern Mariana Islands",
                                                                  "Puerto Rico", "U.S. Virgin Islands"))) %>%
   mutate(state.name = as.character(state.name))
 
-##Retrieve the list of file names in the states folder. Put these files in alphabetical order and add row numbers. Merge 
+## Retrieve the list of file names in the states folder. Put these files in alphabetical order and add row numbers. Merge 
 #this dataframe to the dataframe containing the list of states and U.S. territories. We know know which files correspond
 #to which states.
 files <- cbind(files, data.frame("files" = list.files("/Users/MeganDavis/Documents/r_code/geographies/states")) %>%
@@ -61,35 +67,35 @@ files <- cbind(files, data.frame("files" = list.files("/Users/MeganDavis/Documen
          num = row_number()) %>%
   arrange(files))
 
-##This if statement ensures that the file names have not already been converted.
+## This if statement ensures that the file names have not already been converted.
 if(list.files("/Users/MeganDavis/Documents/r_code/geographies/states")[[1]] %in% "Alabama" == FALSE){
   
-  ##The following section of code renames all folders and and the files within them to be compatible with the rest of this
+  ## The following section of code renames all folders and and the files within them to be compatible with the rest of this
   #program.
   for(i in 1:nrow(files)){
     
-    ##Set the working directory to be inside the relevant folder.
+    ## Set the working directory to be inside the relevant folder.
     setwd(paste0("/Users/MeganDavis/Documents/r_code/geographies/states/", files$files[i]))
     
-    ##Generate a list of the files currently in the folder.
+    ## Generate a list of the files currently in the folder.
     old_files <- list.files(getwd())
     
-    ##Using the relevant state name, create a list of new file names.
+    ## Using the relevant state name, create a list of new file names.
     new_files <- c(paste0(files$state.name[i],".cpg"), paste0(files$state.name[i],".dbf"), 
                    paste0(files$state.name[i],".prj"), paste0(files$state.name[i],".shp"), 
                    paste0(files$state.name[i],".shp.ea.iso.xml"), paste0(files$state.name[i],".shp.iso.xml"), 
                    paste0(files$state.name[i],".shp.xml"), paste0(files$state.name[i],".shx"))
     
-    ##Copy the data from the old files and recreate the same files using the new names.
+    ## Copy the data from the old files and recreate the same files using the new names.
     file.copy(from = old_files, to = new_files)
     
-    ##Remove all files under their old names.
+    ## Remove all files under their old names.
     file.remove(old_files)
     
-    ##Reset the working directory to the states folder.
+    ## Reset the working directory to the states folder.
     setwd("/Users/MeganDavis/Documents/r_code/geographies/states")
     
-    ##Rename the relevant folder to its corresponding state name.
+    ## Rename the relevant folder to its corresponding state name.
     file.rename(from = paste0(files$files[i]), to = paste0(files$state.name[i]))
   }
 }
@@ -108,21 +114,51 @@ coastal_cities <- data.frame("Definition" = c("Incorporated Urban Area", "Incorp
 ##### LOAD AND MANIPULATE CITIES DATA #####
 #-----------------------------------------#
 
-##Prior to this portion of the analysis, a list of all incorporated places with a total population of greater than 50
+## Prior to this portion of the analysis, a list of all incorporated places with a total population of greater than 50
 #thousand was pulled from the census website 
-#(https://www.census.gov/data/tables/time-series/demo/popest/2010s-total-cities-and-towns.html). This is equivalent to 
-#780 incorporated places. Each of these incorporated places were manually matched to their corresponding county. If the 
+#(https://www.census.gov/data/tables/time-series/demo/popest/2010s-total-cities-and-towns.html). This is equivalent to 788
+#incorporated places. Each of these incorporated places were manually matched to their corresponding county in a 
+#spreadsheet named "U.S. Cities to Counties," which can be downloaded here 
+#(https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing).
+
+## Set the working directory to the coastal_cities project folder.
+setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+## Load the raw incorporated place data file. Create clean city and state columns and rename the columns.
+inc.df <- read.csv(file = "data/SUB-IP-EST2019-ANNRNK.csv", header = TRUE, sep = ",") %>%
+  extract(X, c("City", "State"), "([^,]+), ([^)]+)") %>%
+  mutate(City = gsub("\\ city.*", "", City),
+         City = gsub("\\ town.*", "", City),
+         City = gsub("\\ municipality.*", "", City),
+         City = gsub("\\ village.*", "", City),
+         City = gsub("\\-.*", "", City),
+         City = gsub("\\/.*", "", City),
+         City = gsub("\\.*Urban ", "", City),
+         City = gsub("\\ CDP.*", "", City)) %>%
+  select(City, State, "Census_2010" = X.1, "Census_Estimates_Base" = X.2, "2010" = X.3, "2011" = X.4, "2012" = X.5, 
+         "2013" = X.6, "2014" = X.7, "2015" = X.8, "2016" = X.9, "2017" = X.10, "2018" = X.11, "2019" = X.12) %>%
+  filter(!is.na(City))
+
+## Load the cities to counties data set.
+city_county <- read.csv(file = "data/U.S. Coastal Cities - U.S. Cities to Counties.csv", header = TRUE, sep = ",") %>%
+  extract(County, c("County_1", "County_2"), "([^,]+), ([^)]+)")
+
+
+
+
+
+Each of these incorporated places were manually matched to their corresponding county. If the 
 #county is classified as coastal (https://www.census.gov/library/visualizations/2019/demo/coastline-america.html), the 
 #incorporated place is considered coastal as well. You can access this spreadsheet here: 
 #https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing. The 
 #incorporated_places spreadsheet on Github is the same as the U.S. Cities page in the master spreadsheet.
 
-##Set the working directory to the coastal_cities project folder.
-setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
+
+
 
 ##Read in the incorporated places csv. Convert State, City, County, and Region columns to characters for easy data
 #manipulation.
-inc.df <- read.csv(file = "data/incorporated_places.csv", header = TRUE, sep = ",") %>%
+inc.df2 <- read.csv(file = "data/incorporated_places.csv", header = TRUE, sep = ",") %>%
   mutate(State = as.character(State),
          City = as.character(City),
          County = as.character(County),
