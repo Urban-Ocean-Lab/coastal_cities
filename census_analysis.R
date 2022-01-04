@@ -334,12 +334,30 @@ setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 #(https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing).
 write.csv(inc.df, "coastal_cities_pop.csv")
 
+## While the commas in the population estimates look nice for a csv output, R sees commas as signifying a character
+#and will not allow such values to be converted to numeric variables for summing and other mathematical functions. This
+#section of code removes all commas from the population estimate columns and converts them to nu
+inc.df <- inc.df %>%
+  mutate(Census_2010 = as.numeric(gsub(",", "", Census_2010)),
+         Census_Estimates_Base = as.numeric(gsub(",", "", Census_Estimates_Base)),
+         e2010 = as.numeric(gsub(",", "", e2010)),
+         e2011 = as.numeric(gsub(",", "", e2011)),
+         e2012 = as.numeric(gsub(",", "", e2012)),
+         e2013 = as.numeric(gsub(",", "", e2013)),
+         e2014 = as.numeric(gsub(",", "", e2014)),
+         e2015 = as.numeric(gsub(",", "", e2015)),
+         e2016 = as.numeric(gsub(",", "", e2016)),
+         e2017 = as.numeric(gsub(",", "", e2017)),
+         e2018 = as.numeric(gsub(",", "", e2018)),
+         e2019 = as.numeric(gsub(",", "", e2019)))
+
 ## Calculate total population living in coastal cities. Again, all incorporated areas fall in Urban Areas, so the numbers 
-#for "Incorporated Urban Area" and "Incorporated Urban Area or Cluster" are the same.
-This comes out to 49,297,913 people.
+#for "Incorporated Urban Area" and "Incorporated Urban Area or Cluster" are the same. This comes out to 56,740,131 people.
 coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Incorporated Urban Area" | 
                                          coastal_cities$Definition %in% "Incorporated Urban Area or Cluster"] <- 
-  as.numeric(sum(inc.df$Population.Estimate..as.of.July.1....2018))
+  sum(inc.df$e2019)
+
+### SKIP FOR NOW, MUST BE DONE BY HAND
 
 ##The calculation of how many people living in coastal cities are people of color was originally done directly in the 
 #coastal cities master spreadsheet. I eventually plan to move that portion of the analysis into this code, but for now the 
@@ -352,22 +370,15 @@ coastal_cities$People_of_Color[coastal_cities$Definition %in% "Incorporated Urba
 ##### CREATE COASTAL COUNTIES SHAPEFILE #####
 #-------------------------------------------# THROUGH HERE
 
-##The Census Bureau provides county-level shapefiles. However, they do not distinguish which of the counties are coastal in
-#the shapefile data. This section of code pulls in a list of U.S. coastal counties and uses that information to filter the
-#county shapefile to only include coastal counties.
+## The Census Bureau provides county-level shapefiles. However, they do not distinguish which of the counties are coastal
+#in the shapefile data. This section of code pulls in a list of U.S. coastal counties and uses that information to filter 
+#the county shapefile to only include coastal counties.
 
-##Set the working directory to the coastal cities project folder.
+## Set the working directory to the coastal cities project folder.
 setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 
-##Read in the coastal counties dataframe. I created this spreadsheet manually using the list of U.S. coastal counties 
-#available here: https://www.census.gov/library/visualizations/2019/demo/coastline-america.html. I edited the name of some
-#counties in the spreadsheet. My edited version is available under the U.S. Coastal Counties tab of the master spreadsheet:
-#https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing. The Coastal.County
-#and State columns are renamed in order to bind this information to the county shapefile.
-coast_county.df <- read.csv(file = "data/coastal_counties.csv", header = TRUE, sep = ",") %>%
-  mutate(Coastal.County = as.character(Coastal.County),
-         State = as.character(State),
-         Region = as.character(Region)) %>%
+## Rename the columns in the coastal county data frame.
+c_co <- c_co %>%
   select("NAMELSAD" = Coastal.County, "Name" = State, Region)
 
 ##Set the working directory to the geographies folder.
@@ -377,7 +388,7 @@ setwd("/Users/MeganDavis/Documents/r_code/geographies")
 #https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2019&layergroup=Counties+%28and+equivalent%29.
 coast_county.shp <- readOGR("counties/tl_2019_us_county.shp")
 
-##In order to merge the county shapefile to the coast_county.df dataframe, we need two columns to join on: the county name
+##In order to merge the county shapefile to the c_co dataframe, we need two columns to join on: the county name
 #and the state name. This is because some counties of the same name may exist in different states. However, the shapefile
 #does not list the states by name, it uses their FIPS code. Therefore, we first bind the shapefile to a dataframe that maps
 #FIPS codes to state name. Once this is completed, we merge the coast_county.df dataframe to the county shapefile by state 
@@ -394,7 +405,7 @@ coast_county.shp <- merge(merge(coast_county.shp,
                                                             "U.S. Virgin Islands", "American Samoa", "Guam", 
                                                             "Northern Mariana Islands", "Puerto Rico", 
                                                             "U.S. Virgin Islands"))), 
-                                by = "STATEFP"), coast_county.df, by = c("NAMELSAD", "Name"))
+                                by = "STATEFP"), c_co, by = c("NAMELSAD", "Name"))
 
 ##Filter the county shapefile (coast_county.shp) to only include coastal counties.
 coast_county.shp <- coast_county.shp[is.na(coast_county.shp@data$Region)==F,]
@@ -409,8 +420,9 @@ coast_county.shp <- coast_county.shp[is.na(coast_county.shp@data$Region)==F,]
 #two versions of this data: one created using data collected over the past five years and one created using data over the 
 #past year. While the one year data is more accurate because it was collected more recently, not all areas will have data 
 #collected in the past year. Therefore, for our  anaylsis, I use the five year data, so I can capture more areas in my 
-#estimate. You can learn more about the difference here: https://www.census.gov/programs-surveys/acs/guidance/estimates.html
-#If you decide to use the one year estimate instead, substitute "urban_pop.csv" with "urban_pop_1yr.csv."
+#estimate. You can learn more about the difference here: 
+#https://www.census.gov/programs-surveys/acs/guidance/estimates.html. If you decide to use the one year estimate instead, 
+#substitute "urban_pop.csv" with "urban_pop_1yr.csv."
 
 ##Set the working directory to the coastal cities project folder.
 setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
@@ -419,7 +431,8 @@ setwd("/Users/MeganDavis/Documents/r_code/coastal_cities")
 #"(2010)" from the end of the Urbanized Area/Cluster name. There is also an issue where county names with accents did not
 #load properly. The section of code with all of the case_when statements remedies this issue. Add row numbers. Convert
 #all of the population stats to characters so we don't have to deal with factors.
-urban.df <- read.csv(file = "data/urban_pop.csv", header = TRUE, sep = ",") %>%
+urban.df <- read.csv(file = "data/ACSST5Y2019.S0101_data_with_overlays_2021-12-16T094810.csv", 
+                     header = TRUE, sep = ",") %>%
   filter(!as.character(GEO_ID) %in% "id") %>%
   mutate(NAME = as.character(NAME),
          NAME = str_remove(NAME, " [(]2010[])]"),
@@ -434,9 +447,9 @@ urban.df <- read.csv(file = "data/urban_pop.csv", header = TRUE, sep = ",") %>%
          NAME = case_when(str_detect(NAME, "g�e")==T ~ str_replace(NAME, "�", "ü"),
                           str_detect(NAME, "g�e")==F ~ NAME),
          row_num = row_number()) %>%
-  select(NAME, "pop_2018" = S0101_C01_001E, "pop_male" = S0101_C03_001E, "pop_female" = S0101_C05_001E, 
+  select(NAME, "pop_2019" = S0101_C01_001E, "pop_male" = S0101_C03_001E, "pop_female" = S0101_C05_001E, 
          row_num) %>%
-  mutate(pop_2018 = as.character(pop_2018),
+  mutate(pop_2019 = as.character(pop_2019),
          pop_male = as.character(pop_male),
          pop_female = as.character(pop_female))
 
@@ -469,11 +482,11 @@ for(i in 1:nrow(urban.df)){
   
 }
 
-##Join the 2018 Urbanized Area and Urban Cluster population data to the dataframe of coastal Urbanized Areas and Urban 
+##Join the 2019 Urbanized Area and Urban Cluster population data to the dataframe of coastal Urbanized Areas and Urban 
 #Clusters. Remove the dummy row of NA values. Convert all population stats to numeric variables.
 coast_urban.df <- left_join(coast_urban.df, urban.df[1:4], by = c("Name" = "NAME")) %>%
   filter(is.na(Name)==F) %>%
-  mutate(pop_2018 = as.numeric(pop_2018),
+  mutate(pop_2019 = as.numeric(pop_2019),
          pop_male = as.numeric(pop_male),
          pop_female = as.numeric(pop_female))
 
@@ -481,26 +494,27 @@ coast_urban.df <- left_join(coast_urban.df, urban.df[1:4], by = c("Name" = "NAME
 ##### DETERMINE PROPORTION PEOPLE OF COLOR #####
 #----------------------------------------------#
 
-##This section of code pulls in information on the number of people in Urbanized Areas and Urban Clusters in 2018 who can 
+##This section of code pulls in information on the number of people in Urbanized Areas and Urban Clusters in 2019 who can 
 #be classified as white alone and uses that number to calculate the number of people living in coastal Urbanized Areas or
 #Urban Clusters who identify as people of color. The Urbanized Area and Urban Cluster white alone data is pulled from the
 #census data portal (https://data.census.gov/cedsci/) by doing an advanced search for race and ethnicity in urban areas.
 #There are two classifications of "White alone": there is the broader category of "White alone" and
 #the more selective category of "White alone, not Hispanic or Latino." For this analysis we are using the classification
 #of "White alone, not Hispanic or Latino." There are two versions of this data: one created using data collected over the 
-#past five years and one created using data over the past year. The table used should match the table type used to pull the 
+#past five years and one created using data over the past year. The table used should match the table type used to pull the
 #urban population data. In this case that is the five year data. If you decide to use the one year estimate instead, 
 #substitute "urban_white_nhl.csv" with "urban_white_lyr_nhl.csv." In addition, should you chose to repeat this analysis 
 #using the "White alone" classification, simply select "urban_white.csv" or "urban_white_1yr," according to your desired
 #data structure.
 
-##Pull in the data with the number of people living in  Urbanized Areas and Urban Clusters that can be categorized as "White
-#alone, not Hispanic or Latino." Manipulate the dataframe to be in the same format as the coast_urban.df dataframe and join 
-#it to that dataframe using the Name/NAME columns. Subtract the white alone values from the total population values to 
-#determine the number of people living in coastal Urbanized Areas or Urban Clusters who can be categorized as people of 
-#color.
+##Pull in the data with the number of people living in  Urbanized Areas and Urban Clusters that can be categorized as 
+#"White alone, not Hispanic or Latino." Manipulate the dataframe to be in the same format as the coast_urban.df dataframe 
+#and join it to that dataframe using the Name/NAME columns. Subtract the white alone values from the total population 
+#values to  determine the number of people living in coastal Urbanized Areas or Urban Clusters who can be categorized as 
+#people of color.
 coast_urban.df <- left_join(coast_urban.df,
-                            read.csv(file = "data/urban_white_nhl.csv", header = TRUE, sep = ",") %>%
+                            read.csv(file = "data/ACSDT5Y2019.B01001H_data_with_overlays_2021-12-16T101614.csv", 
+                                     header = TRUE, sep = ",") %>%
                               filter(!as.character(GEO_ID) %in% "id") %>%
                               mutate(NAME = as.character(NAME),
                                      NAME = str_remove(NAME, " [(]2010[])]"),
@@ -515,12 +529,12 @@ coast_urban.df <- left_join(coast_urban.df,
                                      NAME = case_when(str_detect(NAME, "g�e")==T ~ str_replace(NAME, "�", "ü"),
                                                       str_detect(NAME, "g�e")==F ~ NAME),
                                      row_num = row_number()) %>%
-                              select(NAME, "white_2018" = B01001H_001E, "white_male" = B01001H_002E, 
+                              select(NAME, "white_2019" = B01001H_001E, "white_male" = B01001H_002E, 
                                      "white_female" = B01001H_017E) %>%
-                              mutate(white_2018 = as.numeric(as.character(white_2018)),
+                              mutate(white_2019 = as.numeric(as.character(white_2019)),
                                      white_male = as.numeric(as.character(white_male)),
                                      white_female = as.numeric(as.character(white_female))), by = c("Name" = "NAME")) %>%
-  mutate(non_white_2018 = pop_2018 - white_2018,
+  mutate(non_white_2019 = pop_2019 - white_2019,
          non_white_male = pop_male - white_male,
          non_white_female = pop_female - white_female)
 
@@ -529,22 +543,22 @@ coast_urban.df <- left_join(coast_urban.df,
 #(https://docs.google.com/spreadsheets/d/1XgDIfbgstbIpe9L-UdJsF8mZv0JbtJcyMnF8nGrkgVg/edit?usp=sharing).
 write.csv(coast_urban.df, "coastal_cities_pop_v2.csv")
 
-##Calculate the total population living in coastal Urbanized Areas or Urban Clusters. This comes out to 107,766,631 people.
+##Calculate the total population living in coastal Urbanized Areas or Urban Clusters. This comes out to 130,950,849 people.
 coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Area or Cluster"] <- 
-  sum(coast_urban.df$pop_2018)
+  sum(coast_urban.df$pop_2019)
 
-##Calculate how many people of color are living in coastal Urbanized Areas or Urban Clusters. This comes out to 40,038,775
+##Calculate how many people of color are living in coastal Urbanized Areas or Urban Clusters. This comes out to 65,898,258
 #people.
 coastal_cities$People_of_Color[coastal_cities$Definition %in% "Urban Area or Cluster"] <-
-  sum(coast_urban.df$non_white_2018)
+  sum(coast_urban.df$non_white_2019)
 
-##Calculate the total population living in coastal Urbanized Areas. This comes out to 104,413,413 people.
+##Calculate the total population living in coastal Urbanized Areas. This comes out to 126,490,760 people.
 coastal_cities$Coastal_City_Population[coastal_cities$Definition %in% "Urban Area"] <-
-  sum(coast_urban.df$pop_2018[str_detect(coast_urban.df$Name, "Urbanized Area")])
+  sum(coast_urban.df$pop_2019[str_detect(coast_urban.df$Name, "Urbanized Area")])
 
-##Calculate how many people of color are living in coastal Urbanized Areas. This comes out to 
+##Calculate how many people of color are living in coastal Urbanized Areas. This comes out to 64,465,594.
 coastal_cities$People_of_Color[coastal_cities$Definition %in% "Urban Area"] <-
-  sum(coast_urban.df$non_white_2018[str_detect(coast_urban.df$Name, "Urbanized Area")])
+  sum(coast_urban.df$non_white_2019[str_detect(coast_urban.df$Name, "Urbanized Area")])
 
 #---------------------------------------------------------#
 ##### IDENTIFY COASTAL METROPOLITAN STATISTICAL AREAS #####
@@ -556,7 +570,7 @@ coastal_cities$People_of_Color[coastal_cities$Definition %in% "Urban Area"] <-
 #pulled from the census data portal (https://data.census.gov/cedsci/) by doing an advanced search for people and population 
 #in Metropolitan Statistical Area/Micropolitan Statistical Area. There are two versions of this data: one created using data
 #collected over the past five years and one created using data over the past year. While the one year data is more accurate 
-#because it was collected more recently, not all areas will have data collected in teh past year. Therefore, for our 
+#because it was collected more recently, not all areas will have data collected in the past year. Therefore, for our 
 #analysis, I use the five year data, so I can capture more areas in my estimate. You can learn more about the difference 
 #between the two datasets here: https://www.census.gov/programs-surveys/acs/guidance/estimates.html. If you decide to use 
 #the one year estimate instead, substitute "metropolitan_pop.csv" with "metropolitan_pop_1yr.csv."
@@ -823,4 +837,4 @@ coastal_cities.map <- coastal_cities.map %>%
   addControl("Footprint of U.S. Coastal Cities", position = c("topright"))
 
 ##Save the coastal cities map as an html widget.
-#saveWidget(coastal_cities.map, file = "coastal_cities.html")
+saveWidget(coastal_cities.map, file = "coastal_cities.html")
